@@ -15,8 +15,7 @@ import (
 
 const (
 	TEMPLATE_ID           = "AAq0BtEvPm8DZ"
-	TEMPLATE_VERSION_NAME = "1.0.5"
-	CHAT_ID               = "oc_ee9a94ca81e2fbce54e739144392c266"
+	TEMPLATE_VERSION_NAME = "1.0.6"
 )
 
 var (
@@ -71,7 +70,6 @@ type ContentTemplate struct {
 // 发送天气卡片
 func SendChatMsg() error {
 	client := config.GetLarkClient()
-	chatID := CHAT_ID
 	contentTemplate := "{\"type\": \"\", \"data\": { \"template_id\": \"\",\n\"template_version_name\": \"\",\"template_variable\": {} } }"
 	var template ContentTemplate
 	err := json.Unmarshal([]byte(contentTemplate), &template)
@@ -101,6 +99,7 @@ func SendChatMsg() error {
 		return err
 	}
 	weatherInfos := make([]WeatherInfo, 0)
+	isNextDay := false
 	for _, v := range respHourly.Hourly {
 		var tempIcon string
 		tempNum, _ := strconv.Atoi(v.Temp)
@@ -113,9 +112,15 @@ func SendChatMsg() error {
 		} else {
 			tempIcon = "SKULL"
 		}
+
+		// 第二天
+		if utils.ParseTime(v.FxTime) == "00:00" {
+			isNextDay = true
+		}
+
 		weatherInfos = append(weatherInfos,
 			WeatherInfo{
-				Time:        fmt.Sprintf("%s %s", "⏰ ", utils.ParseTime(v.FxTime)),
+				Time:        fmt.Sprintf("%s%s", getPreviewTime(isNextDay), utils.ParseTime(v.FxTime)),
 				Emoji:       tempIcon,
 				Temperature: v.Temp,
 				Weather:     fmt.Sprintf("%s %s", weatherToEmoji[v.Text], v.Text),
@@ -135,22 +140,35 @@ func SendChatMsg() error {
 	}
 
 	// 创建请求对象
-	req := larkim.NewCreateMessageReqBuilder().
-		ReceiveIdType(`chat_id`).
-		Body(larkim.NewCreateMessageReqBodyBuilder().
-			ReceiveId(chatID).
-			MsgType(`interactive`).
-			Content(string(templateJson)).
-			Build()).
-		Build()
-	resp, err := client.Im.Message.Create(context.Background(), req)
+	chats, err := GetChatList()
 	if err != nil {
-		l.Errorf("send msg err: %s", err.Error())
+		l.Errorf("获取群ids失败: %s", err.Error())
 		return err
 	}
-	if !resp.Success() {
-		l.Errorf("send msg error success is false")
-		return err
+	// 遍历发送群
+	for i := 0; i < len(chats); i++ {
+		chatID := chats[i]
+		// 正式群
+		// if chatID == "oc_ee9a94ca81e2fbce54e739144392c266" {
+		// 	continue
+		// }
+		req := larkim.NewCreateMessageReqBuilder().
+			ReceiveIdType(`chat_id`).
+			Body(larkim.NewCreateMessageReqBodyBuilder().
+				ReceiveId(chatID).
+				MsgType(`interactive`).
+				Content(string(templateJson)).
+				Build()).
+			Build()
+		resp, err := client.Im.Message.Create(context.Background(), req)
+		if err != nil {
+			l.Errorf("send msg err: %s", err.Error())
+			return err
+		}
+		if !resp.Success() {
+			l.Errorf("send msg error success is false")
+			return err
+		}
 	}
 	return nil
 }
@@ -184,4 +202,11 @@ func GetChatList() ([]string, error) {
 		}
 	}
 	return chats, nil
+}
+
+func getPreviewTime(isNextDay bool) string {
+	if isNextDay {
+		return "n."
+	}
+	return ""
 }

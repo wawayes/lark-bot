@@ -33,8 +33,9 @@ func main() {
 	r.POST("/webhook/event", sdkginext.NewEventHandlerFunc(eventHandler))
 
 	c := cron.New()
-	c.AddFunc("0 7-23/4 * * *", func() { // 每天的7:00, 11:00, 15:00, 19:00 和 23:00 执行
+	c.AddFunc("45 6,10,14,18,22 * * *", func() { // 每天的6:45, 10:45, 14:45, 18:45 和 22:45 执行
 		fmt.Println("Task executed at:", time.Now().Format("2006-01-02 15:04:05"))
+		handlers.SendChatMsg()
 	})
 	c.Start()
 

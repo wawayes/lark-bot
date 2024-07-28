@@ -23,7 +23,7 @@ var (
 
 func GetConfig() *Config {
 	once.Do(func() {
-		path := "../config.yaml"
+		path := "config.yaml"
 		data, err := ioutil.ReadFile(path)
 		if err != nil {
 			l.Errorf("读取配置文件路径失败: [path]: %s, err: %s", path, err.Error())

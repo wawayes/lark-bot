@@ -21,6 +21,6 @@ func TestGetChatList(t *testing.T) {
 func TestSendChatMsg(t *testing.T) {
 	conf := config.GetConfig()
 	config.LoadLarkClient(*conf)
-	err := SendChatMsg("oc_8f43329098cfc919213c3c87007f5409")
+	err := SendChatMsg()
 	assert.Nil(t, err)
 }

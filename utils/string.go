@@ -13,6 +13,6 @@ func ParseTime(isoTime string) string {
 	}
 
 	// Format the time in "HH:mm" format
-	formattedTime := parsedTime.Format("1月2日15:04")
+	formattedTime := parsedTime.Format("15:04")
 	return formattedTime
 }
