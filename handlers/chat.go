@@ -92,7 +92,7 @@ type ContentTemplate struct {
 // 定时向群聊发送逐时天气信息
 func CronTaskRun() {
 	conf := config.GetConfig()
-	testChatID := conf.TestChatID
+	testChatID := conf.AllChatID
 	idType := "chat_id"
 	msg_type := "interactive"
 	templateJson, err := ConstructWeatherContent()
