@@ -2,13 +2,15 @@ module github.com/wawayes/lark-bot
 
 go 1.22.0
 
-require github.com/gin-gonic/gin v1.10.0
+require (
+	github.com/gin-gonic/gin v1.10.0
+	github.com/robfig/cron/v3 v3.0.1
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/larksuite/oapi-sdk-gin v1.0.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/robfig/cron/v3 v3.0.1 // indirect
 )
 
 require (

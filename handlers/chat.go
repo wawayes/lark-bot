@@ -5,17 +5,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"time"
 
 	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
+	"github.com/robfig/cron/v3"
 	l "github.com/sirupsen/logrus"
 	"github.com/wawayes/lark-bot/config"
 	"github.com/wawayes/lark-bot/services"
-	"github.com/wawayes/lark-bot/utils"
 )
 
 const (
 	TEMPLATE_ID           = "AAq0BtEvPm8DZ"
-	TEMPLATE_VERSION_NAME = "1.0.6"
+	TEMPLATE_VERSION_NAME = "1.0.8"
 )
 
 var (
@@ -51,9 +52,30 @@ type WeatherInfo struct {
 }
 
 type TemplateVariable struct {
-	MaxTemperature string        `json:"max_temperature"`
-	MinTemperature string        `json:"min_temperature"`
-	WeatherInfos   []WeatherInfo `json:"weather_infos"`
+	CityLocation    string     `json:"city_location"`    // 城市-地区
+	TodayWeather    string     `json:"today_weather"`    // 今日天气
+	AirCondition    string     `json:"air_condition"`    // 空气质量
+	MaxTemperature  string     `json:"max_temperature"`  // 最高温度
+	MinTemperature  string     `json:"min_temperature"`  // 最低温度
+	TomorrowWeather string     `json:"tomorrow_weather"` // 明日天气
+	ComfText        string     `json:"comf_text"`        // 舒适度描述
+	ComfLevel       string     `json:"comf_level"`       // 舒适度指数
+	WearText        string     `json:"wear_text"`        // 穿衣描述
+	WearLevel       string     `json:"wear_level"`       // 穿衣指数
+	HomeTemp        string     `json:"home_temp"`        // 家的温度
+	HomeText        string     `json:"home_text"`        // 家的天气
+	SuZhouJieTemp   string     `json:"suzhoujie_temp"`   // 苏州街温度
+	SuZhouJieText   string     `json:"suzhoujie_text"`   // 苏州街天气
+	XiErQiTemp      string     `json:"xierqi_temp"`      // 西二旗温度
+	XiErQiText      string     `json:"xierqi_text"`      // 西二旗天气
+	WeatherUrl      WeatherUrl `json:"weather_url"`
+}
+
+type WeatherUrl struct {
+	Url        string `json:"url"`
+	PcUrl      string `json:"pc_url"`
+	IOSUrl     string `json:"ios_url"`
+	AndroidUrl string `json:"android_url"`
 }
 
 type Data struct {
@@ -67,109 +89,120 @@ type ContentTemplate struct {
 	Data Data   `json:"data"`
 }
 
-// 发送天气卡片
-func SendChatMsg() error {
-	client := config.GetLarkClient()
-	contentTemplate := "{\"type\": \"\", \"data\": { \"template_id\": \"\",\n\"template_version_name\": \"\",\"template_variable\": {} } }"
-	var template ContentTemplate
-	err := json.Unmarshal([]byte(contentTemplate), &template)
+// 定时向群聊发送逐时天气信息
+func CronTaskRun() {
+	conf := config.GetConfig()
+	testChatID := conf.TestChatID
+	idType := "chat_id"
+	msg_type := "interactive"
+	templateJson, err := ConstructWeatherContent()
 	if err != nil {
-		l.Errorf("json marshal err: %s", err.Error())
-		return err
+		l.Errorf("构建天气发送内容失败 err: %s", err.Error())
 	}
+	c := cron.New()
+	c.AddFunc("33 1,6,10,14,18,22 * * *", func() { // 每天的6:45, 10:45, 14:45, 18:45 和 22:45 执行
+		fmt.Println("Task executed at:", time.Now().Format("2006-01-02 15:04:05"))
+		SendChatMsg(idType, testChatID, msg_type, templateJson)
+	})
+	c.Start()
+}
 
-	//获取当日天气
+// 根据温度匹配一个飞书表情
+func GenTempIcon(temperature string) (tempIcon string) {
+	tempNum, _ := strconv.Atoi(temperature)
+	if tempNum >= 30 {
+		tempIcon = "ANGRY"
+	} else if tempNum >= 25 {
+		tempIcon = "OBSESSED"
+	} else if tempNum >= 15 {
+		tempIcon = "BETRAYED"
+	} else {
+		tempIcon = "SKULL"
+	}
+	return
+}
+
+// 构建content发送消息的消息体
+func ConstructWeatherContent() (string, error) {
+	//获取今明两天天气
 	respDaily, err := services.GetWeatherDay(3)
 	if err != nil {
 		l.Errorf("get weather day err: %s", err.Error())
-		return err
+		return "", err
 	}
-	if len(respDaily.Daily) <= 0 {
-		l.Errorf("get weather failed")
-		return err
-	}
-	// 获取逐时天气
-	respHourly, err := services.GetWeatherHourly()
+	// 获取空气质量
+	airCondition, err := services.GetAirCondition()
 	if err != nil {
-		l.Errorf("get weather hourly failed")
-		return err
+		l.Errorf("get air condition err: %s", err.Error())
+		return "", err
 	}
-	if len(respHourly.Hourly) <= 0 {
-		l.Errorf("get weather failed")
-		return err
+	// 获取生活指数
+	respLife, err := services.GetDaily()
+	if err != nil {
+		l.Errorf("get life level err: %s", err.Error())
+		return "", err
 	}
-	weatherInfos := make([]WeatherInfo, 0)
-	isNextDay := false
-	for _, v := range respHourly.Hourly {
-		var tempIcon string
-		tempNum, _ := strconv.Atoi(v.Temp)
-		if tempNum >= 30 {
-			tempIcon = "ANGRY"
-		} else if tempNum >= 25 {
-			tempIcon = "OBSESSED"
-		} else if tempNum >= 15 {
-			tempIcon = "BETRAYED"
-		} else {
-			tempIcon = "SKULL"
-		}
-
-		// 第二天
-		if utils.ParseTime(v.FxTime) == "00:00" {
-			isNextDay = true
-		}
-
-		weatherInfos = append(weatherInfos,
-			WeatherInfo{
-				Time:        fmt.Sprintf("%s%s", getPreviewTime(isNextDay), utils.ParseTime(v.FxTime)),
-				Emoji:       tempIcon,
-				Temperature: v.Temp,
-				Weather:     fmt.Sprintf("%s %s", weatherToEmoji[v.Text], v.Text),
-			})
+	// 获取格点天气
+	gridResp1, _ := services.GetGridWeather(services.HOME_LOCATION)
+	gridResp2, _ := services.GetGridWeather(services.SUZHOUJIE_LOCATION)
+	gridResp3, _ := services.GetGridWeather(services.XIERQI_LOCATION)
+	// 构建content template
+	var template = &ContentTemplate{
+		Type: "template",
+		Data: Data{
+			TemplateID:          TEMPLATE_ID,
+			TemplateVersionName: TEMPLATE_VERSION_NAME,
+			TemplateVariable: TemplateVariable{
+				CityLocation:    "北京",
+				TodayWeather:    respDaily.Daily[0].TextDay,
+				AirCondition:    airCondition,
+				MaxTemperature:  respDaily.Daily[0].TempMax,
+				MinTemperature:  respDaily.Daily[0].TempMin,
+				TomorrowWeather: respDaily.Daily[1].TextDay,
+				ComfText:        respLife.Daily[0].Text,
+				ComfLevel:       respLife.Daily[0].Category,
+				WearText:        respLife.Daily[1].Text,
+				WearLevel:       respLife.Daily[1].Category,
+				HomeTemp:        gridResp1.Now.Temp,
+				HomeText:        gridResp1.Now.Text,
+				SuZhouJieTemp:   gridResp2.Now.Temp,
+				SuZhouJieText:   gridResp2.Now.Text,
+				XiErQiTemp:      gridResp3.Now.Temp,
+				XiErQiText:      gridResp3.Now.Text,
+				WeatherUrl:      WeatherUrl{Url: services.WEATHER_URL, PcUrl: services.WEATHER_URL, IOSUrl: services.WEATHER_URL, AndroidUrl: services.WEATHER_URL},
+			},
+		},
 	}
-	template.Type = "template"
-	template.Data.TemplateVariable.MaxTemperature = respDaily.Daily[0].TempMax // 最高温度
-	template.Data.TemplateVariable.MinTemperature = respDaily.Daily[0].TempMin // 最低温度
-	template.Data.TemplateID = TEMPLATE_ID                                     // 模版ID
-	template.Data.TemplateVersionName = TEMPLATE_VERSION_NAME                  // 模板版本号
-	template.Data.TemplateVariable.WeatherInfos = weatherInfos                 // 天气
-
 	templateJson, err := json.Marshal(template)
 	if err != nil {
 		l.Errorf("json marshal err: %s", err.Error())
+		return "", err
+	}
+	return string(templateJson), nil
+}
+
+// 发送群聊天气卡片
+func SendChatMsg(idType, id, msgType, templateJson string) error {
+	client := config.GetLarkClient()
+	// 创建请求对象
+	req := larkim.NewCreateMessageReqBuilder().
+		ReceiveIdType(idType).
+		Body(larkim.NewCreateMessageReqBodyBuilder().
+			ReceiveId(id).
+			MsgType(msgType).
+			Content(string(templateJson)).
+			Build()).
+		Build()
+	resp, err := client.Im.Message.Create(context.Background(), req)
+	if err != nil {
+		l.Errorf("send msg err: %s", err.Error())
+		return err
+	}
+	if !resp.Success() {
+		l.Errorf("send msg error success is false")
 		return err
 	}
 
-	// 创建请求对象
-	chats, err := GetChatList()
-	if err != nil {
-		l.Errorf("获取群ids失败: %s", err.Error())
-		return err
-	}
-	// 遍历发送群
-	for i := 0; i < len(chats); i++ {
-		chatID := chats[i]
-		// 正式群
-		// if chatID == "oc_ee9a94ca81e2fbce54e739144392c266" {
-		// 	continue
-		// }
-		req := larkim.NewCreateMessageReqBuilder().
-			ReceiveIdType(`chat_id`).
-			Body(larkim.NewCreateMessageReqBodyBuilder().
-				ReceiveId(chatID).
-				MsgType(`interactive`).
-				Content(string(templateJson)).
-				Build()).
-			Build()
-		resp, err := client.Im.Message.Create(context.Background(), req)
-		if err != nil {
-			l.Errorf("send msg err: %s", err.Error())
-			return err
-		}
-		if !resp.Success() {
-			l.Errorf("send msg error success is false")
-			return err
-		}
-	}
 	return nil
 }
 

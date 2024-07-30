@@ -9,11 +9,20 @@ import (
 	"github.com/wawayes/lark-bot/utils"
 )
 
+// 五福家园3号楼 116.271227,40.151309
+
+// 苏州街地铁站 116.312784,39.981726
+
+// 西二旗地铁站 116.312564,40.059029
+
 const (
-	WARNING_BASE_URL = "https://devapi.qweather.com/v7/warning/now" // 预警地址前缀
-	WEATHER_BASE_URL = "https://devapi.qweather.com/v7/weather"     // 天气地址前缀
-	KEY              = "27df0ab1a3014458b59906f1c8bfa6f7"           // api key
-	LOCATION         = "101010100"                                  // 北京坐标
+	WEATHER_BASE_URL   = "https://devapi.qweather.com/v7"                          // 天气地址前缀
+	WEATHER_URL        = "https://www.qweather.com/weather/beijing-101010100.html" // 天气地址
+	KEY                = "27df0ab1a3014458b59906f1c8bfa6f7"                        // api key
+	LOCATION           = "101010100"                                               // 北京的LocationID
+	HOME_LOCATION      = "116.27,40.15"                                            // 家的坐标
+	SUZHOUJIE_LOCATION = "116.31,39.98"                                            // 苏州街坐标
+	XIERQI_LOCATION    = "116.31,40.05"                                            // 西二旗坐标
 )
 
 // CommonWeatherDetails - 存储多种天气数据中的共通字段
@@ -42,6 +51,7 @@ type DailyWeather struct {
 	MoonPhaseIcon string `json:"moonPhaseIcon"` // 月相图标代码
 	TempMax       string `json:"tempMax"`       // 当天最高温度
 	TempMin       string `json:"tempMin"`       // 当天最低温度
+	TextDay       string `json:"textDay"`       // 白天天气描述
 	UvIndex       string `json:"uvIndex"`       // 紫外线强度指数
 	Vis           string `json:"vis"`           // 能见度
 	CommonWeatherDetails
@@ -108,9 +118,43 @@ type WarningResponse struct {
 	} `json:"refer"`
 }
 
+// 格点天气响应体
+type GridResponse struct {
+	Code       string               `json:"code"`       // 状态码
+	UpdateTime string               `json:"updateTime"` // 当前API的最近更新时间
+	FxLink     string               `json:"fxLink"`     // 当前数据的响应式页面
+	Now        CommonWeatherDetails `json:"now"`        // 格点实时天气
+	Refer      struct {
+		Sources []string `json:"sources"` // 原始数据来源
+		License []string `json:"license"` // 数据许可或版权声明
+	} `json:"refer"`
+}
+
+// 生活指数
+type DailyLevel struct {
+	Date     string `json:"date"`
+	Type     string `json:"type"`
+	Name     string `json:"name"`
+	Level    string `json:"level"`
+	Category string `json:"category"`
+	Text     string `json:"text"`
+}
+
+// 生活指数响应体
+type DailyResponse struct {
+	Code       string       `json:"code"`
+	UpdateTime string       `json:"updateTime"`
+	FxLink     string       `json:"fxLink"`
+	Daily      []DailyLevel `json:"daily"`
+	Refer      struct {
+		Sources []string `json:"sources"` // 原始数据来源
+		License []string `json:"license"` // 数据许可或版权声明
+	} `json:"refer"`
+}
+
 // 实时天气接口
 func GetWeatherNow() (*WeatherResponse, error) {
-	url := fmt.Sprintf("%s/now?key=%s&location=%s", WEATHER_BASE_URL, KEY, LOCATION)
+	url := fmt.Sprintf("%s/weather/now?key=%s&location=%s", WEATHER_BASE_URL, KEY, LOCATION)
 	data, err := utils.HttpGet(url)
 	if err != nil {
 		l.Errorf("get weather err: %s", err.Error())
@@ -123,7 +167,7 @@ func GetWeatherNow() (*WeatherResponse, error) {
 		return nil, err
 	}
 	if resp.Code != "200" {
-		l.Errorf("get weather api code is not 200, resp: %v", resp)
+		l.Errorf("get weather warning code is not 200, resp: %v", resp)
 		return nil, errors.New("code is not 200")
 	}
 	return &resp, nil
@@ -132,7 +176,7 @@ func GetWeatherNow() (*WeatherResponse, error) {
 // 每日天气接口
 // param: num 查询接下来num天的天气
 func GetWeatherDay(num int) (*WeatherResponse, error) {
-	url := fmt.Sprintf("%s/%dd?key=%s&location=%s", WEATHER_BASE_URL, num, KEY, LOCATION)
+	url := fmt.Sprintf("%s/weather/%dd?key=%s&location=%s", WEATHER_BASE_URL, num, KEY, LOCATION)
 	data, err := utils.HttpGet(url)
 	if err != nil {
 		l.Errorf("get daily weather err: %s", err.Error())
@@ -145,7 +189,7 @@ func GetWeatherDay(num int) (*WeatherResponse, error) {
 		return nil, err
 	}
 	if resp.Code != "200" {
-		l.Errorf("get daily weather api code is not 200, resp: %v", resp)
+		l.Errorf("get weather warning code is not 200, resp: %v", resp)
 		return nil, errors.New("code is not 200")
 	}
 	return &resp, nil
@@ -153,7 +197,7 @@ func GetWeatherDay(num int) (*WeatherResponse, error) {
 
 // 逐小时天气接口
 func GetWeatherHourly() (*WeatherResponse, error) {
-	url := fmt.Sprintf("%s/24h?key=%s&location=%s", WEATHER_BASE_URL, KEY, LOCATION)
+	url := fmt.Sprintf("%s/weather/24h?key=%s&location=%s", WEATHER_BASE_URL, KEY, LOCATION)
 	data, err := utils.HttpGet(url)
 	if err != nil {
 		l.Errorf("get hourly daily weather err: %s", err.Error())
@@ -165,12 +209,16 @@ func GetWeatherHourly() (*WeatherResponse, error) {
 		l.Errorf("hourly weather now json Unmarshal err: %s", err.Error())
 		return nil, err
 	}
+	if resp.Code != "200" {
+		l.Errorf("get weather warning code is not 200, resp: %v", resp)
+		return nil, errors.New("code is not 200")
+	}
 	return &resp, nil
 }
 
 // 获取天气预警
 func GetWeatherWarning() (*WarningResponse, error) {
-	url := fmt.Sprintf("%s?key=%s&location=%s", WARNING_BASE_URL, KEY, LOCATION)
+	url := fmt.Sprintf("%s/warning/now?key=%s&location=%s", WEATHER_BASE_URL, KEY, LOCATION)
 	data, err := utils.HttpGet(url)
 	if err != nil {
 		l.Errorf("get weather warning err: %s", err.Error())
@@ -182,5 +230,78 @@ func GetWeatherWarning() (*WarningResponse, error) {
 		l.Errorf("get weather warning json unmarshal err: %s", err.Error())
 		return nil, err
 	}
+	if resp.Code != "200" {
+		l.Errorf("get weather warning code is not 200, resp: %v", resp)
+		return nil, errors.New("code is not 200")
+	}
 	return &resp, nil
+}
+
+// 获取格点实时天气
+func GetGridWeather(location string) (*GridResponse, error) {
+	url := fmt.Sprintf("%s/grid-weather/now?key=%s&location=%s", WEATHER_BASE_URL, KEY, location)
+	data, err := utils.HttpGet(url)
+	if err != nil {
+		l.Errorf("get grid weather err: %s", err.Error())
+		return nil, err
+	}
+	var resp GridResponse
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		l.Errorf("json unmarshal err: %s", err.Error())
+		return nil, err
+	}
+	if resp.Code != "200" {
+		l.Errorf("get grid weather code is not 200")
+		return nil, errors.New("code is not 200")
+	}
+	return &resp, nil
+}
+
+// 获取生活指数
+func GetDaily() (*DailyResponse, error) {
+	url := fmt.Sprintf("%s/indices/1d?type=3,8&key=%s&location=%s", WEATHER_BASE_URL, KEY, LOCATION)
+	data, err := utils.HttpGet(url)
+	if err != nil {
+		l.Errorf("get daily err: %s", err.Error())
+		return nil, err
+	}
+	var resp DailyResponse
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		l.Errorf("json unmarshal err: %s", err.Error())
+		return nil, err
+	}
+	if resp.Code != "200" {
+		l.Errorf("get daily code is not 200")
+		return nil, errors.New("code is not 200")
+	}
+	return &resp, nil
+}
+
+// 获取空气质量
+func GetAirCondition() (string, error) {
+	type airResponse struct {
+		Code string `json:"code"`
+		Now  struct {
+			Category string `json:"category"` // 空气质量描述
+		} `json:"now"`
+	}
+	url := fmt.Sprintf("%s/air/now?location=%s&key=%s", WEATHER_BASE_URL, LOCATION, KEY)
+	data, err := utils.HttpGet(url)
+	if err != nil {
+		l.Errorf("get daily err: %s", err.Error())
+		return "", err
+	}
+	var resp airResponse
+	err = json.Unmarshal(data, &resp)
+	if err != nil {
+		l.Errorf("json unmarshal err: %s", err.Error())
+		return "", err
+	}
+	if resp.Code != "200" {
+		l.Errorf("get daily code is not 200")
+		return "", errors.New("code is not 200")
+	}
+	return resp.Now.Category, nil
 }

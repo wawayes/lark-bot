@@ -1,15 +1,19 @@
+/*
+ * @Description:
+ * @Author: wangmingyao@duxiaoman.com
+ * @version:
+ * @Date: 2024-07-28 07:03:02
+ * @LastEditTime: 2024-07-31 01:31:45
+ */
 package main
 
 import (
 	"context"
-	"fmt"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	sdkginext "github.com/larksuite/oapi-sdk-gin"
 	"github.com/larksuite/oapi-sdk-go/v3/event/dispatcher"
 	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
-	"github.com/robfig/cron/v3"
 	"github.com/wawayes/lark-bot/config"
 	"github.com/wawayes/lark-bot/handlers"
 )
@@ -32,12 +36,7 @@ func main() {
 		})
 	r.POST("/webhook/event", sdkginext.NewEventHandlerFunc(eventHandler))
 
-	c := cron.New()
-	c.AddFunc("45 6,10,14,18,22 * * *", func() { // 每天的6:45, 10:45, 14:45, 18:45 和 22:45 执行
-		fmt.Println("Task executed at:", time.Now().Format("2006-01-02 15:04:05"))
-		handlers.SendChatMsg()
-	})
-	c.Start()
+	handlers.CronTaskRun()
 
 	// 监听并在 0.0.0.0:8080 上启动服务
 	r.Run("0.0.0.0:9000")
