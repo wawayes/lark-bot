@@ -100,7 +100,7 @@ func CronTaskRun() {
 		l.Errorf("构建天气发送内容失败 err: %s", err.Error())
 	}
 	c := cron.New()
-	c.AddFunc("33 1,6,10,14,18,22 * * *", func() { // 每天的6:45, 10:45, 14:45, 18:45 和 22:45 执行
+	c.AddFunc("45 6 * * *", func() { // 每天的6:45执行
 		fmt.Println("Task executed at:", time.Now().Format("2006-01-02 15:04:05"))
 		SendChatMsg(idType, testChatID, msg_type, templateJson)
 	})
