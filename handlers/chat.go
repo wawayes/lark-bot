@@ -95,12 +95,12 @@ func CronTaskRun() {
 	testChatID := conf.AllChatID
 	idType := "chat_id"
 	msg_type := "interactive"
-	templateJson, err := ConstructWeatherContent()
-	if err != nil {
-		l.Errorf("构建天气发送内容失败 err: %s", err.Error())
-	}
 	c := cron.New()
 	c.AddFunc("45 6 * * *", func() { // 每天的6:45执行
+		templateJson, err := ConstructWeatherContent()
+		if err != nil {
+			l.Errorf("构建天气发送内容失败 err: %s", err.Error())
+		}
 		fmt.Println("Task executed at:", time.Now().Format("2006-01-02 15:04:05"))
 		SendChatMsg(idType, testChatID, msg_type, templateJson)
 	})
