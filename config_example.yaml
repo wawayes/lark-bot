@@ -1,0 +1,12 @@
+env:
+  http_port: 9000
+lark:
+  app_id: xxx
+  app_secret: xxx
+  encrypt_token: xxx
+  verification_token: xxx
+  test_chat_id: xxx
+  all_chat_id: xxx
+qweather:
+  key: xxx
+  location: xxx
