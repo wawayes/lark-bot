@@ -14,7 +14,7 @@ import (
 func CronTaskRun() {
 	conf := initialization.GetConfig()
 	client := weather.NewWeatherClient(conf.QWeather.Key, conf.QWeather.Location)
-	chatID := conf.Lark.TestChatID	
+	chatID := conf.Lark.AllChatID	
 	idType := "chat_id"
 	msg_type := "interactive"
 	warningFlag := false
@@ -34,7 +34,7 @@ func CronTaskRun() {
 		}
 		warningFlag = true
 	})
-	c.AddFunc("30 21 5 * * *", func() { 
+	c.AddFunc("0 55 6 * * *", func() { 
 		fmt.Println("Task executed at:", time.Now().Format("2006-01-02 15:04:05"))
 		templateJson, err := ConstructTodayWeatherContent(client)
 		if err != nil {

@@ -142,9 +142,9 @@ func ReplyMinutelyWeather() (string, error) {
 	xierqi, _ := client.GetMinutelyWeather(weather.XierqiLatitude)
 	suzhoujie, _ := client.GetMinutelyWeather(weather.SuzhoujieLatitude)
 	res := fmt.Sprintf("\n五福家园, %s, %s \n\n苏州街, %s, %s\n\n西二旗, %s, %s",
-		weather.HomeLatitude, home,
-		weather.SuzhoujieLatitude,
-		suzhoujie, weather.XierqiLatitude, xierqi)
+		weather.HomeLatitude, home.Summary,
+		weather.SuzhoujieLatitude, suzhoujie.Summary, 
+		weather.XierqiLatitude, xierqi.Summary)
 	return res, nil
 }
 
