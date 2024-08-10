@@ -1,3 +1,5 @@
+github.com/Equationzhao/qweather-go v0.0.0-20240329155854-5ed6f2c24705 h1:u2Bst1i6Q26jizEMFsA1tqIlRhTRSXyEm7EFTCXkLrE=
+github.com/Equationzhao/qweather-go v0.0.0-20240329155854-5ed6f2c24705/go.mod h1:y2GAOO/+I6V2WmrEGwC7AUnPxN4Ntru3os8z6iY6p/g=
 github.com/bytedance/sonic v1.11.9 h1:LFHENlIY/SLzDWverzdOvgMztTxcfcF+cqNsz9pK5zg=
 github.com/bytedance/sonic v1.11.9/go.mod h1:LysEHSvpvDySVdC2f87zGWf6CIKJcAvqab1ZaiQtds4=
 github.com/bytedance/sonic/loader v0.1.1 h1:c+e5Pt1k/cy5wMveRDyk2X4B9hF4g7an8N3zCYjJFNM=
@@ -77,6 +79,8 @@ github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS
 github.com/twitchyliquid64/golang-asm v0.15.1/go.mod h1:a1lVb/DtPvCB8fslRZhAngC2+aY1QWCk3Cedj/Gdt08=
 github.com/ugorji/go/codec v1.2.12 h1:9LC83zGrHhuUA9l16C9AHXAqEV/2wBQ4nkvumAE65EE=
 github.com/ugorji/go/codec v1.2.12/go.mod h1:UNopzCgEMSXjBc6AOMqYvWC1ktqTAfzJZUZgYf6w6lg=
+github.com/wawayes/qweather-sdk-go v0.0.0-20240808104920-82ea646e4d1d h1:1+HaT9mbUrGqDjcixQn6plDiFVz1DR21AJRYU6V29wo=
+github.com/wawayes/qweather-sdk-go v0.0.0-20240808104920-82ea646e4d1d/go.mod h1:Tda86/1N2W5nJcmWa+MxT2+ccaCXb+exYhtVFxdf0/E=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 golang.org/x/arch v0.0.0-20210923205945-b76863e36670/go.mod h1:5om86z9Hs0C8fWVUuoMHwpExlXzs5Tkyp9hOrfG7pp8=
