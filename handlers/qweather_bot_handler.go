@@ -7,6 +7,7 @@ import (
 
 	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 	"github.com/wawayes/lark-bot/services"
+	"github.com/wawayes/lark-bot/utils"
 	qweather "github.com/wawayes/qweather-sdk-go"
 )
 
@@ -82,6 +83,12 @@ func (h *QWeatherBotHandler) Handle(ctx context.Context, event *larkim.P2Message
 	case "/today":
 		h.Logger.Info("handling today weather")
 		err = h.handleTodayCommand(ctx, event)
+	case "/now":
+		h.Logger.Info("handling now weather")
+		err = h.handleNowCommand(ctx, event)
+	case "/warning":
+		h.Logger.Info("handling warning weather")
+		err = h.handleWarningCommand(ctx, event)
 	default:
 		h.BotHelper.SendMsg("chat_id", *event.Event.Message.ChatId, "text", `{"text": "不支持的命令"}`, h.LarkClient)
 	}
@@ -99,7 +106,7 @@ func (h *QWeatherBotHandler) handleTodayCommand(_ context.Context, event *larkim
 	lalon := fmt.Sprintf("%s,%s", location.Longtitude, location.Latitude)
 	if !exists {
 		h.Logger.Infof("Location not found for openID: %s", openID)
-		resp, err := h.BotHelper.SendMsg("chat_id", openID, "interactive", `{"text": "没有找到您的位置信息，请先发送您的位置信息"}`, h.LarkClient)
+		resp, err := h.BotHelper.SendMsg("chat_id", openID, "text", `{"text": "没有找到您的位置信息，请先发送您的位置信息"}`, h.LarkClient)
 		if err != nil || !resp.Success() {
 			h.Logger.Errorf("SendMsg error: %s", err.Error())
 			return err
@@ -153,11 +160,108 @@ func (h *QWeatherBotHandler) handleTodayCommand(_ context.Context, event *larkim
 		},
 	}
 	b, _ := json.Marshal(card)
-	jsonStr := string(b)
-	h.Logger.Infof("jsonStr: %s", jsonStr)
-	resp, err := h.BotHelper.SendMsg("chat_id", openID, "interactive", jsonStr, h.LarkClient)
+	resp, err := h.BotHelper.SendMsg("chat_id", openID, "interactive", string(b), h.LarkClient)
 	if err != nil || resp.Code != 0 {
 		h.Logger.Errorf("SendMsg error: %s, resp: %s", err.Error(), resp.Msg)
+		return err
+	}
+	return nil
+}
+
+func (h *QWeatherBotHandler) handleNowCommand(_ context.Context, event *larkim.P2MessageReceiveV1) error {
+	// 获取当前位置
+	openID := *event.Event.Message.ChatId
+	location, exists := h.LocationService.GetLocation(openID)
+	lalon := fmt.Sprintf("%s,%s", location.Longtitude, location.Latitude)
+	if !exists {
+		h.Logger.Infof("Location not found for openID: %s", openID)
+		resp, err := h.BotHelper.SendMsg("chat_id", openID, "text", `{"text": "没有找到您的位置信息，请先发送您的位置信息"}`, h.LarkClient)
+		if err != nil || !resp.Success() {
+			h.Logger.Errorf("SendMsg error: %s", err.Error())
+			return err
+		}
+		return nil
+	}
+	// 查询城市信息
+	city, err := h.QWeatherClient.CityLookup(lalon, "3")
+	if err != nil {
+		h.Logger.Errorf("CityLookup error: %s", err.Error())
+		return err
+	}
+	// 获取实时天气
+	now, err := h.QWeatherClient.GetCurrentWeather(lalon)
+	if err != nil {
+		h.Logger.Errorf("GetNowWeather error: %s", err.Error())
+		return err
+	}
+	// 格式化时间
+	obsTime := utils.ParseTime(now.Now.ObsTime)
+	// 构建实时天气信息
+	card := &ContentTemplate{
+		Type: "template",
+		Data: Data{
+			TemplateID: WEATHER_NOW_TEMPLATE_ID,
+			TemplateVariable: TemplateVariable{
+				CityLocation:   city.Location[0].Name,
+				NowTemperature: now.Now.Temp,
+				WeatherText:    now.Now.Text,
+				ObsTime:        obsTime,
+				Humidity:       now.Now.Humidity,
+				FeelTemp:       now.Now.FeelsLike,
+				Vis:            now.Now.Vis,
+				WeatherUrl:     ThirdUrl{PcUrl: now.FxLink, AndroidUrl: now.FxLink, IOSUrl: now.FxLink},
+			},
+		},
+	}
+	b, _ := json.Marshal(card)
+	resp, err := h.BotHelper.SendMsg("chat_id", openID, "interactive", string(b), h.LarkClient)
+	if err != nil || !resp.Success() {
+		h.Logger.Errorf("SendMsg error: %s", err.Error())
+		return err
+	}
+	return nil
+}
+
+func (h *QWeatherBotHandler) handleWarningCommand(_ context.Context, larkim *larkim.P2MessageReceiveV1) error {
+	// 获取当前位置
+	openID := *larkim.Event.Message.ChatId
+	location, exists := h.LocationService.GetLocation(openID)
+	lalon := fmt.Sprintf("%s,%s", location.Longtitude, location.Latitude)
+	if !exists {
+		h.Logger.Infof("Location not found for openID: %s", openID)
+		resp, err := h.BotHelper.SendMsg("chat_id", openID, "text", `{"text": "没有找到您的位置信息，请先发送您的位置信息"}`, h.LarkClient)
+		if err != nil || !resp.Success() {
+			h.Logger.Errorf("SendMsg error: %s", err.Error())
+			return err
+		}
+		return nil
+	}
+	city, err := h.QWeatherClient.CityLookup(lalon, "3")
+	if err != nil {
+		h.Logger.Errorf("CityLookup error: %s", err.Error())
+		return err
+	}
+	// 获取天气预警信息
+	warning, err := h.QWeatherClient.GetWarningWeather(lalon)
+	if err != nil {
+		h.Logger.Errorf("GetWarningWeather error: %s", err.Error())
+		return err
+	}
+	// 构建天气预警信息
+	card := &ContentTemplate{
+		Type: "template",
+		Data: Data{
+			TemplateID: WEATHER_WARINING_TEMPLATE_ID,
+			TemplateVariable: TemplateVariable{
+				CityLocation:   city.Location[0].Adm2,
+				WeatherWarning: warning.Warning[0].Text,
+			},
+		},
+	}
+	b, _ := json.Marshal(card)
+	resp, err := h.BotHelper.SendMsg("chat_id", openID, "interactive", string(b), h.LarkClient)
+	if err != nil || !resp.Success() {
+		h.Logger.Errorf("SendMsg error: %s", err.Error())
 		return err
 	}
 	return nil
