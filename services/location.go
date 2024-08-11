@@ -6,6 +6,7 @@ import (
 )
 
 type Location struct {
+	Name       string
 	Latitude   string
 	Longtitude string
 	Timestamp  time.Time
@@ -22,10 +23,11 @@ func NewLocationService() *LocationService {
 	}
 }
 
-func (s *LocationService) SetLocation(openID, lat, lon string) {
+func (s *LocationService) SetLocation(openID, name, lat, lon string) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.locations[openID] = Location{
+		Name:       name,
 		Latitude:   lat,
 		Longtitude: lon,
 		Timestamp:  time.Now(),
@@ -39,6 +41,6 @@ func (s *LocationService) GetLocation(openID string) (Location, bool) {
 	return location, ok
 }
 
-func (s *LocationService) SaveLocation(openID, lat, lon string) {
-	s.SetLocation(openID, lat, lon)
+func (s *LocationService) SaveLocation(openID, name, lat, lon string) {
+	s.SetLocation(openID, name, lat, lon)
 }

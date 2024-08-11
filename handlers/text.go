@@ -23,7 +23,6 @@ func (f *HandlerFactory) CreateTextHandler(base *BaseHandler, qweather *qweather
 	return &TextMessageHandler{BaseHandler: *base, QweatherClient: qweather, LocationService: locationService, BotHandlers: botHandlers}
 }
 
-// TODO 不艾特时, 会空指针
 func (h *TextMessageHandler) Handle(ctx context.Context, event *larkim.P2MessageReceiveV1) error {
 	h.Logger.Infof("进入到了消息处理器, 消息内容: %s", *event.Event.Message.Content)
 	// 判断机器人是否被艾特

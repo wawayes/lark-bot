@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 	"github.com/wawayes/lark-bot/services"
@@ -15,6 +16,7 @@ const (
 	WEATHER_TEMPLATE_ID          = "AAq0BtEvPm8DZ" // 每日天气模板
 	WEATHER_WARINING_TEMPLATE_ID = "AAq0KrVFKi8kd" // 天气预警模板
 	WEATHER_NOW_TEMPLATE_ID      = "AAq0elKwjDqMg" // 实时天气模板
+	WEATHER_RAIN_TEMPLATE_ID     = "AAq0aPQGCCqzZ" // 降雨预报模板
 )
 
 type QWeatherBotHandler struct {
@@ -61,6 +63,7 @@ type TemplateVariable struct {
 	Humidity        string   `json:"humidity"`         // 相对湿度
 	FeelTemp        string   `json:"feel_temp"`        // 体感温度
 	Vis             string   `json:"vis"`              // 能见度
+	Content         string   `json:"content"`          // 文本内容
 	WeatherUrl      ThirdUrl `json:"weather_url"`      // 天气URL
 }
 
@@ -74,21 +77,24 @@ type ThirdUrl struct {
 func (h *QWeatherBotHandler) Handle(ctx context.Context, event *larkim.P2MessageReceiveV1) error {
 	h.Logger.Info("QWeatherHandler is handling the message")
 	text := *event.Event.Message.Content
-	cmd, err := h.BotHelper.ParseTextMsg(text)
+	cmd, location, err := h.ParseCmd(text)
 	if err != nil {
 		h.Logger.Errorf("ParseTextMsg error: %s", err.Error())
 		return err
 	}
 	switch cmd {
-	case "/today":
+	case "today":
 		h.Logger.Info("handling today weather")
-		err = h.handleTodayCommand(ctx, event)
-	case "/now":
+		err = h.handleTodayCommand(ctx, event, location)
+	case "now":
 		h.Logger.Info("handling now weather")
-		err = h.handleNowCommand(ctx, event)
-	case "/warning":
+		err = h.handleNowCommand(ctx, event, location)
+	case "warning":
 		h.Logger.Info("handling warning weather")
-		err = h.handleWarningCommand(ctx, event)
+		err = h.handleWarningCommand(ctx, event, location)
+	case "rain":
+		h.Logger.Info("handling rain weather")
+		err = h.handleRainCommand(ctx, event, location)
 	default:
 		h.BotHelper.SendMsg("chat_id", *event.Event.Message.ChatId, "text", `{"text": "不支持的命令"}`, h.LarkClient)
 	}
@@ -99,42 +105,28 @@ func (h *QWeatherBotHandler) Handle(ctx context.Context, event *larkim.P2Message
 	return nil
 }
 
-func (h *QWeatherBotHandler) handleTodayCommand(_ context.Context, event *larkim.P2MessageReceiveV1) error {
-	// 获取当前位置
+func (h *QWeatherBotHandler) handleTodayCommand(_ context.Context, event *larkim.P2MessageReceiveV1, location string) error {
 	openID := *event.Event.Message.ChatId
-	location, exists := h.LocationService.GetLocation(openID)
-	lalon := fmt.Sprintf("%s,%s", location.Longtitude, location.Latitude)
-	if !exists {
-		h.Logger.Infof("Location not found for openID: %s", openID)
-		resp, err := h.BotHelper.SendMsg("chat_id", openID, "text", `{"text": "没有找到您的位置信息，请先发送您的位置信息"}`, h.LarkClient)
-		if err != nil || !resp.Success() {
-			h.Logger.Errorf("SendMsg error: %s", err.Error())
-			return err
-		}
-		return nil
-	}
-	// 查询城市信息
-	city, err := h.QWeatherClient.CityLookup(lalon, "3")
+	lonla, cityName, err := h.getLonLaAndCityName(openID, location)
 	if err != nil {
-		h.Logger.Errorf("CityLookup error: %s", err.Error())
+		h.Logger.Errorf("getLonLaAndCityName error: %s", err.Error())
 		return err
 	}
-	locationID := city.Location[0].ID
 	// 获取未来三日天气预报
-	daily, err := h.QWeatherClient.GetDailyForecast(locationID, 3)
+	daily, err := h.QWeatherClient.GetGridDailyWeather(lonla, 3)
 	if err != nil {
 		h.Logger.Errorf("GetDailyForecast error: %s", err.Error())
 		return err
 	}
 	// 获取生活指数
 	indicesType := []string{"3", "8"}
-	indices, err := h.QWeatherClient.GetIndicesWeather(indicesType, locationID, 1)
+	indices, err := h.QWeatherClient.GetIndicesWeather(indicesType, lonla, 1)
 	if err != nil {
 		h.Logger.Errorf("GetIndicesWeather error: %s", err.Error())
 		return err
 	}
 	// 获取空气质量
-	air, err := h.QWeatherClient.GetAirQuality(locationID)
+	air, err := h.QWeatherClient.GetAirQuality(lonla)
 	if err != nil {
 		h.Logger.Errorf("GetAirQuality error: %s", err.Error())
 		return err
@@ -145,7 +137,7 @@ func (h *QWeatherBotHandler) handleTodayCommand(_ context.Context, event *larkim
 		Data: Data{
 			TemplateID: WEATHER_TEMPLATE_ID,
 			TemplateVariable: TemplateVariable{
-				CityLocation:    city.Location[0].Name,
+				CityLocation:    cityName,
 				MaxTemperature:  daily.Daily[0].TempMax,
 				MinTemperature:  daily.Daily[0].TempMin,
 				TomorrowWeather: daily.Daily[1].TextDay,
@@ -168,28 +160,15 @@ func (h *QWeatherBotHandler) handleTodayCommand(_ context.Context, event *larkim
 	return nil
 }
 
-func (h *QWeatherBotHandler) handleNowCommand(_ context.Context, event *larkim.P2MessageReceiveV1) error {
-	// 获取当前位置
+func (h *QWeatherBotHandler) handleNowCommand(_ context.Context, event *larkim.P2MessageReceiveV1, location string) error {
 	openID := *event.Event.Message.ChatId
-	location, exists := h.LocationService.GetLocation(openID)
-	lalon := fmt.Sprintf("%s,%s", location.Longtitude, location.Latitude)
-	if !exists {
-		h.Logger.Infof("Location not found for openID: %s", openID)
-		resp, err := h.BotHelper.SendMsg("chat_id", openID, "text", `{"text": "没有找到您的位置信息，请先发送您的位置信息"}`, h.LarkClient)
-		if err != nil || !resp.Success() {
-			h.Logger.Errorf("SendMsg error: %s", err.Error())
-			return err
-		}
-		return nil
-	}
-	// 查询城市信息
-	city, err := h.QWeatherClient.CityLookup(lalon, "3")
+	lonla, cityName, err := h.getLonLaAndCityName(openID, location)
 	if err != nil {
-		h.Logger.Errorf("CityLookup error: %s", err.Error())
+		h.Logger.Errorf("getLonLaAndCityName error: %s", err.Error())
 		return err
 	}
 	// 获取实时天气
-	now, err := h.QWeatherClient.GetCurrentWeather(lalon)
+	now, err := h.QWeatherClient.GetCurrentWeather(lonla)
 	if err != nil {
 		h.Logger.Errorf("GetNowWeather error: %s", err.Error())
 		return err
@@ -202,7 +181,7 @@ func (h *QWeatherBotHandler) handleNowCommand(_ context.Context, event *larkim.P
 		Data: Data{
 			TemplateID: WEATHER_NOW_TEMPLATE_ID,
 			TemplateVariable: TemplateVariable{
-				CityLocation:   city.Location[0].Name,
+				CityLocation:   cityName,
 				NowTemperature: now.Now.Temp,
 				WeatherText:    now.Now.Text,
 				ObsTime:        obsTime,
@@ -222,30 +201,22 @@ func (h *QWeatherBotHandler) handleNowCommand(_ context.Context, event *larkim.P
 	return nil
 }
 
-func (h *QWeatherBotHandler) handleWarningCommand(_ context.Context, larkim *larkim.P2MessageReceiveV1) error {
-	// 获取当前位置
-	openID := *larkim.Event.Message.ChatId
-	location, exists := h.LocationService.GetLocation(openID)
-	lalon := fmt.Sprintf("%s,%s", location.Longtitude, location.Latitude)
-	if !exists {
-		h.Logger.Infof("Location not found for openID: %s", openID)
-		resp, err := h.BotHelper.SendMsg("chat_id", openID, "text", `{"text": "没有找到您的位置信息，请先发送您的位置信息"}`, h.LarkClient)
-		if err != nil || !resp.Success() {
-			h.Logger.Errorf("SendMsg error: %s", err.Error())
-			return err
-		}
-		return nil
-	}
-	city, err := h.QWeatherClient.CityLookup(lalon, "3")
+func (h *QWeatherBotHandler) handleWarningCommand(_ context.Context, event *larkim.P2MessageReceiveV1, location string) error {
+	openID := *event.Event.Message.ChatId
+	lonla, cityName, err := h.getLonLaAndCityName(openID, location)
 	if err != nil {
-		h.Logger.Errorf("CityLookup error: %s", err.Error())
+		h.Logger.Errorf("getLonLaAndCityName error: %s", err.Error())
 		return err
 	}
 	// 获取天气预警信息
-	warning, err := h.QWeatherClient.GetWarningWeather(lalon)
+	warning, err := h.QWeatherClient.GetWarningWeather(lonla)
 	if err != nil {
 		h.Logger.Errorf("GetWarningWeather error: %s", err.Error())
 		return err
+	}
+	if len(warning.Warning) == 0 {
+		h.BotHelper.SendMsg("chat_id", openID, "text", `{"text": "此地区暂无天气预警信息"}`, h.LarkClient)
+		return nil
 	}
 	// 构建天气预警信息
 	card := &ContentTemplate{
@@ -253,7 +224,7 @@ func (h *QWeatherBotHandler) handleWarningCommand(_ context.Context, larkim *lar
 		Data: Data{
 			TemplateID: WEATHER_WARINING_TEMPLATE_ID,
 			TemplateVariable: TemplateVariable{
-				CityLocation:   city.Location[0].Adm2,
+				CityLocation:   cityName,
 				WeatherWarning: warning.Warning[0].Text,
 			},
 		},
@@ -265,4 +236,91 @@ func (h *QWeatherBotHandler) handleWarningCommand(_ context.Context, larkim *lar
 		return err
 	}
 	return nil
+}
+
+func (h *QWeatherBotHandler) handleRainCommand(_ context.Context, event *larkim.P2MessageReceiveV1, location string) error {
+	openID := *event.Event.Message.ChatId
+	lonla, cityName, err := h.getLonLaAndCityName(openID, location)
+	if err != nil {
+		h.Logger.Errorf("getLonLaAndCityName error: %s", err.Error())
+		h.BotHelper.SendMsg("chat_id", openID, "text", `{"text": "查询的数据或地区不存在"}`, h.LarkClient)
+		return err
+	}
+	// 获取降雨预报
+	rain, err := h.QWeatherClient.GetMinutelyPrecipitation(lonla)
+	if err != nil {
+		h.Logger.Errorf("GetMinutelyPrecipitation error: %s", err.Error())
+		return err
+	}
+	// 构建降雨预报信息
+	card := &ContentTemplate{
+		Type: "template",
+		Data: Data{
+			TemplateID: WEATHER_RAIN_TEMPLATE_ID,
+			TemplateVariable: TemplateVariable{
+				CityLocation: cityName,
+				Content:      rain.Summary,
+				WeatherUrl:   ThirdUrl{PcUrl: rain.FxLink, AndroidUrl: rain.FxLink, IOSUrl: rain.FxLink},
+			},
+		},
+	}
+	b, _ := json.Marshal(card)
+	resp, err := h.BotHelper.SendMsg("chat_id", openID, "interactive", string(b), h.LarkClient)
+	if err != nil || !resp.Success() {
+		h.Logger.Errorf("SendMsg error: %s", err.Error())
+		return err
+	}
+	return nil
+}
+
+func (h *QWeatherBotHandler) getLonLaAndCityName(openID, location string) (string, string, error) {
+	var (
+		lonla, cityName string
+	)
+	if location == "" {
+		locationObj, exists := h.LocationService.GetLocation(openID)
+		cityName = locationObj.Name
+		lonla = fmt.Sprintf("%s,%s", locationObj.Longtitude, locationObj.Latitude)
+		if !exists {
+			h.Logger.Infof("Location not found for openID: %s", openID)
+			resp, err := h.BotHelper.SendMsg("chat_id", openID, "text", `{"text": "没有找到您的位置信息，请先发送您的位置信息"}`, h.LarkClient)
+			if err != nil || !resp.Success() {
+				h.Logger.Errorf("SendMsg error: %s", err.Error())
+				return "", "", err
+			}
+			return "", "", nil
+		}
+	} else {
+		resp, err := h.QWeatherClient.CityLookup(location, "1")
+		if err != nil {
+			h.Logger.Errorf("CityLookup error: %s", err.Error())
+			return "", "", err
+		}
+		cityName = resp.Location[0].Name
+		lonla = fmt.Sprintf("%s,%s", resp.Location[0].Lon, resp.Location[0].Lat)
+	}
+	return lonla, cityName, nil
+}
+
+func (h *QWeatherBotHandler) ParseCmd(text string) (cmd, location string, err error) {
+	content, err := h.BotHelper.ParseTextMsg(text)
+	if err != nil {
+		h.Logger.Errorf("ParseTextMsg error: %s", err.Error())
+		return "", "", err
+	}
+	if !strings.Contains(content, "/") {
+		h.Logger.Errorf("invalid command: %s", content)
+		return content, "", nil
+	}
+	// 分割命令和位置
+	parts := strings.SplitN(content, "/", 3)
+	if len(parts) < 2 {
+		h.Logger.Errorf("invalid command: %s", content)
+		err = fmt.Errorf("invalid command: %s", content)
+	}
+	cmd = parts[1]
+	if len(parts) == 3 {
+		location = parts[2]
+	}
+	return cmd, location, nil
 }

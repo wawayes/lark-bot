@@ -31,7 +31,7 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
-	github.com/wawayes/qweather-sdk-go v0.0.0-20240810184028-9026c636f09a
+	github.com/wawayes/qweather-sdk-go v0.0.0-20240811063418-f24e4083c5ce
 	golang.org/x/arch v0.8.0 // indirect
 	golang.org/x/crypto v0.25.0 // indirect
 	golang.org/x/net v0.27.0 // indirect

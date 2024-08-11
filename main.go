@@ -27,6 +27,7 @@ import (
 func main() {
 	r := gin.Default()
 
+	// 初始化配置
 	conf := initialization.GetConfig()
 	initialization.LoadLarkClient(*conf)
 	larkClient := initialization.GetLarkClient()

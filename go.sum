@@ -77,6 +77,8 @@ github.com/wawayes/qweather-sdk-go v0.0.0-20240808104920-82ea646e4d1d h1:1+HaT9m
 github.com/wawayes/qweather-sdk-go v0.0.0-20240808104920-82ea646e4d1d/go.mod h1:Tda86/1N2W5nJcmWa+MxT2+ccaCXb+exYhtVFxdf0/E=
 github.com/wawayes/qweather-sdk-go v0.0.0-20240810184028-9026c636f09a h1:CMn46bLM3y+QbAgK+ORQGWxZ8yffh98LukA3Fe80DQ0=
 github.com/wawayes/qweather-sdk-go v0.0.0-20240810184028-9026c636f09a/go.mod h1:Tda86/1N2W5nJcmWa+MxT2+ccaCXb+exYhtVFxdf0/E=
+github.com/wawayes/qweather-sdk-go v0.0.0-20240811063418-f24e4083c5ce h1:5jzHvE1OVB0ylwBXY6bof7yGaV/R9sC/AUCBe4GMx34=
+github.com/wawayes/qweather-sdk-go v0.0.0-20240811063418-f24e4083c5ce/go.mod h1:Tda86/1N2W5nJcmWa+MxT2+ccaCXb+exYhtVFxdf0/E=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 golang.org/x/arch v0.0.0-20210923205945-b76863e36670/go.mod h1:5om86z9Hs0C8fWVUuoMHwpExlXzs5Tkyp9hOrfG7pp8=
