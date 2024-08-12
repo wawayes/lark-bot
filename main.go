@@ -16,6 +16,7 @@ import (
 	"github.com/wawayes/lark-bot/handlers"
 	"github.com/wawayes/lark-bot/initialization"
 	"github.com/wawayes/lark-bot/services"
+	"github.com/wawayes/lark-bot/tasks"
 	qweather "github.com/wawayes/qweather-sdk-go"
 
 	"github.com/gin-gonic/gin"
@@ -29,19 +30,46 @@ func main() {
 
 	// 初始化配置
 	conf := initialization.GetConfig()
+	// 飞书客户端初始化
 	initialization.LoadLarkClient(*conf)
 	larkClient := initialization.GetLarkClient()
+	// 日志初始化
 	l := logrus.New()
+	// 和风天气客户端初始化
 	qweatherClient := qweather.NewClient(conf.QWeather.Key)
+	// 机器人助手初始化
 	botHelper := handlers.NewBotHelper(map[string]string{"ou_16f6a982f4a0415201701fc2dd85ef8c": "及时雨大人"})
-	locationService := services.NewLocationService()
+	// redis初始化
+	initialization.InitRedis(*conf)
+	redisClient := initialization.GetRedisClient()
+	cache := services.NewUserCache(redisClient)
+	locationService := services.NewLocationService(cache)
 
+	// 初始化定时任务
+	taskManager := tasks.NewTaskManager(l)
+	dailyWeatherTask := tasks.NewDailyWeatherTask(
+		conf.Tasks.DailyWeather,
+		handlers.CreateQWeatherBotHandler(&handlers.BaseHandler{Logger: l, BotHelper: botHelper, LarkClient: larkClient}, qweatherClient, locationService),
+		locationService,
+	)
+	taskManager.AddTask(dailyWeatherTask)
+	weatherWarningTask := tasks.NewWeatherWarningTask(
+		conf.Tasks.WeatherWarning,
+		handlers.CreateQWeatherBotHandler(&handlers.BaseHandler{Logger: l, BotHelper: botHelper, LarkClient: larkClient, RedisClient: redisClient}, qweatherClient, locationService),
+		locationService,
+	)
+	taskManager.AddTask(weatherWarningTask)
+	taskManager.Start()
+	defer taskManager.Stop()
+
+	// 初始化处理器工厂
 	factory := &handlers.HandlerFactory{
 		Logger:          l,
 		BotHelper:       botHelper,
 		LarkClient:      larkClient,
 		LocationService: locationService,
 		QweatherClient:  qweatherClient,
+		RedisClient:     redisClient,
 	}
 	bot := handlers.NewChatBot(
 		factory,

