@@ -1,4 +1,4 @@
-package initialization
+package infrastructure
 
 import (
 	"io/ioutil"
@@ -15,6 +15,7 @@ type Config struct {
 	Lark     LarkConfig     `yaml:"lark"`
 	QWeather QWeatherConfig `yaml:"qweather"`
 	Tasks    Tasks          `yaml:"tasks"`
+	Log      Log            `yaml:"log"`
 }
 
 // EnvConfig 包含环境相关配置
@@ -50,6 +51,11 @@ type QWeatherConfig struct {
 type Tasks struct {
 	DailyWeather   string `yaml:"daily_weather"`
 	WeatherWarning string `yaml:"weather_warning"`
+}
+
+type Log struct {
+	Level  string
+	Output string
 }
 
 var (
