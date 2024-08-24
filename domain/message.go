@@ -5,6 +5,8 @@ import (
 )
 
 type MessageType string
+type ChatType string
+type ServiceFiled string
 
 const (
 	MsgTypeText        MessageType = "text"
@@ -18,13 +20,13 @@ const (
 	MsgTypeShareChat   MessageType = "share_chat"
 	MsgTypeShareUser   MessageType = "share_user"
 	MsgTypeLocation    MessageType = "location"
-)
 
-type ChatType string
-
-const (
 	P2PChat   ChatType = "p2p"
 	GroupChat ChatType = "group"
+
+	ServiceFiledWeather ServiceFiled = "weather"
+	ServiceFiledLLM     ServiceFiled = "llm"
+	ServiceFieldFlomo   ServiceFiled = "flomo"
 )
 
 type Message struct {
@@ -35,6 +37,7 @@ type Message struct {
 	ChatID     string
 	ChatType   ChatType
 	Content    string
+	Text       string
 	Sender     Sender
 	CreateTime string
 	UpdateTime string
@@ -60,13 +63,6 @@ type IDObject struct {
 	UnionID string
 	UserID  string
 	OpenID  string
-}
-
-type Reply struct {
-	ReceiveIDType string
-	ReceiveID     string
-	Content       string
-	MsgType       MessageType
 }
 
 func (m *Message) UnmarshalContent() (map[string]interface{}, error) {

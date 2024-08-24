@@ -15,6 +15,7 @@ type Config struct {
 	Lark     LarkConfig     `yaml:"lark"`
 	QWeather QWeatherConfig `yaml:"qweather"`
 	Tasks    Tasks          `yaml:"tasks"`
+	Bots     []BotConfig    `yaml:"bot"`
 	Log      Log            `yaml:"log"`
 }
 
@@ -58,6 +59,11 @@ type Log struct {
 	Output string
 }
 
+type BotConfig struct {
+	BotName      string `yaml:"bot_name"`      // 机器人名称
+	ServiceFiled string `yaml:"service_field"` // 服务领域，有weather,llm...
+}
+
 var (
 	conf = &Config{}
 	once sync.Once
@@ -66,21 +72,6 @@ var (
 func GetConfig() *Config {
 	once.Do(func() {
 		path := "config.yaml"
-		data, err := ioutil.ReadFile(path)
-		if err != nil {
-			l.Errorf("Failed to read config file: [path]: %s, err: %s", path, err.Error())
-			return
-		}
-		err = yaml.Unmarshal(data, conf)
-		if err != nil {
-			l.Errorf("Failed to parse YAML config: [yaml content]: %s, err: %s", data, err.Error())
-		}
-	})
-	return conf
-}
-
-func GetTestConfig(path string) *Config {
-	once.Do(func() {
 		data, err := ioutil.ReadFile(path)
 		if err != nil {
 			l.Errorf("Failed to read config file: [path]: %s, err: %s", path, err.Error())
