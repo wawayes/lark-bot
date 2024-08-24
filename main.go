@@ -28,15 +28,17 @@ func main() {
 
 	// 初始化配置
 	conf := infrastructure.GetConfig()
+	// 日志
 	global.InitLogger(*conf)
+	// 初始化适配器，包括 Redis、Lark
 	adapter := adapters.NewAdapter(*conf)
-
+	// 初始化机器人
 	application.InitBots(context.Background(), conf, adapter.Redis())
-
+	// 初始化命令工厂
 	commandFactory := application.NewCommandFactory(adapter)
-
+	// 天气服务
+	weatherService := application.NewWeatherService(conf.QWeather.Key)
 	// 初始化 CardHandler
-	weatherService := application.NewWeatherService("27df0ab1a3014458b59906f1c8bfa6f7")
 	cardHandler := application.NewCardHandler(weatherService, adapter.Lark())
 
 	// 设置事件处理器
