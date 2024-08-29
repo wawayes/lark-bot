@@ -1,7 +1,7 @@
 package domain
 
 type Location struct {
-	Name      string
-	Latitude  string
-	Longitude string
+	Name      string `json:"name"`
+	Latitude  string `json:"latitude"`
+	Longitude string `json:"longitude"`
 }

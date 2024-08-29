@@ -6,15 +6,24 @@ type Geo struct {
 }
 
 type DailyForecast struct {
-	City      string
-	FxDate    string
-	TempMax   string
-	TempMin   string
-	TextDay   string
-	TextNight string
-	Humidity  string
-	WindSpeed string
-	FxLink    string
+	City       string
+	UpdateTime string  `json:"updateTime"`
+	FxLink     string  `json:"fxLink"`
+	Daily      []Daily `json:"daily"`
+}
+
+type Daily struct {
+	FxDate       string `json:"fxDate"`
+	Sunrise      string `json:"sunrise"`
+	Sunset       string `json:"sunset"`
+	TempMax      string `json:"tempMax"`
+	TempMin      string `json:"tempMin"`
+	TextDay      string `json:"textDay"`
+	TextNight    string `json:"textNight"`
+	WindSpeedDay string `json:"windSpeedDay"`
+	Humidity     string `json:"humidity"`
+	Precip       string `json:"precip"`
+	Pressure     string `json:"pressure"`
 }
 
 type CurrentWeather struct {
@@ -34,6 +43,15 @@ type RainSnow struct {
 
 type WarningWeather struct {
 	City    string
-	Summary string
+	Warning []Warning
 	FxLink  string
+}
+
+type Warning struct {
+	Sender   string
+	PubTime  string
+	Title    string
+	Status   string
+	Severity string
+	Text     string
 }

@@ -3,8 +3,8 @@ package application
 import (
 	"context"
 
-	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
 	"github.com/wawayes/lark-bot/domain"
+	"github.com/wawayes/lark-bot/global"
 	"github.com/wawayes/lark-bot/infrastructure/adapters"
 )
 
@@ -19,48 +19,58 @@ func NewHandleTextMessage(adapter adapters.Adapter) *HandleTextMessage {
 	}
 }
 
-func (h *HandleTextMessage) Execute(ctx context.Context, message domain.Message) error {
+func (h *HandleTextMessage) Execute(ctx context.Context, message domain.Message) *global.BasicError {
+	if len(message.Mentions) == 0 {
+		return nil
+	}
 	// 获取消息中艾特的机器人
 	serviceField, err := adapters.WhichMentioned(ctx, h.adapters.Redis(), message)
 	if err != nil {
-		return err
+		return global.NewBasicError(global.CodeServerError, "get mentioned bot error", serviceField, err)
 	}
 
-	// 根据不同的机器人执行不同的逻辑
+	// 创建对应的卡片工厂
+	var cardFactory domain.CardFactory
 	switch serviceField {
 	case domain.ServiceFiledWeather:
-		cardJson, err := h.buildWeatherCard()
-		if err != nil {
-			return err
-		}
-		return h.adapters.Lark().SendCardMsg(ctx, message.ChatID, cardJson)
+		cardFactory = &WeatherCardFactory{}
 	case domain.ServiceFiledLLM:
-		return h.adapters.Lark().SendCardMsg(ctx, message.ChatID, "llm card json")
+		cardFactory = &LLMCardFactory{}
 	case domain.ServiceFieldFlomo:
-		return h.adapters.Lark().SendCardMsg(ctx, message.ChatID, "flomo card json")
+		cardFactory = &FlomoCardFactory{}
 	default:
-		return nil
+		cardFactory = &DefaultCardFactory{}
 	}
+
+	// 使用工厂创建卡片
+	cardJson, err := cardFactory.CreateCard()
+	if err != nil {
+		return global.NewBasicError(global.CodeServerError, "create card error", cardJson, err)
+	}
+
+	// 发送卡片消息
+	return h.adapters.Lark().SendCardMsg(ctx, message.ChatID, cardJson)
 }
 
-func (h *HandleTextMessage) buildWeatherCard() (string, error) {
-	card := adapters.NewLarkMessageCard()
-	card.AddHeader("天气信息")
-	card.AddTextElement("请选择您需要的天气信息类型：")
+// LLM卡片工厂
+type LLMCardFactory struct{}
 
-	btnDaily := card.AddButton("今日天气", map[string]interface{}{
-		"todo": "today_weather",
-	}, *larkcard.MessageCardButtonTypeDefault.Ptr())
-	btnCurrent := card.AddButton("实时天气", map[string]interface{}{
-		"todo": "current_weather",
-	}, *larkcard.MessageCardButtonTypeDefault.Ptr())
-	card.AddCardAction(larkcard.MessageCardActionLayoutTrisection.Ptr(), []larkcard.MessageCardActionElement{btnDaily, btnCurrent})
-	card.AddTextElement("更多天气信息：")
-	card.AddLinkElement("访问和风天气官网", "https://www.qweather.com/")
-	cardJson, err := card.ToJson()
-	if err != nil {
-		return "", err
-	}
-	return cardJson, nil
+func (f *LLMCardFactory) CreateCard() (string, *global.BasicError) {
+	// TODO: 实现LLM卡片的创建逻辑
+	return "llm card json", nil
+}
 
+// Flomo卡片工厂
+type FlomoCardFactory struct{}
+
+func (f *FlomoCardFactory) CreateCard() (string, *global.BasicError) {
+	// TODO: 实现Flomo卡片的创建逻辑
+	return "flomo card json", nil
+}
+
+// 默认卡片工厂
+type DefaultCardFactory struct{}
+
+func (f *DefaultCardFactory) CreateCard() (string, *global.BasicError) {
+	return `{"text": "template card"}`, nil
 }

@@ -9,7 +9,9 @@ import (
 	larkcore "github.com/larksuite/oapi-sdk-go/v3/core"
 	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 	"github.com/redis/go-redis/v9"
+
 	"github.com/wawayes/lark-bot/domain"
+	"github.com/wawayes/lark-bot/global"
 	"github.com/wawayes/lark-bot/infrastructure"
 )
 
@@ -30,7 +32,7 @@ func NewLarkClient(config infrastructure.Config) *LarkClient {
 }
 
 // 回复消息
-func (lc *LarkClient) ReplyMsg(ctx context.Context, receiveID, msgType, contentJson string) error {
+func (lc *LarkClient) ReplyMsg(ctx context.Context, receiveID, msgType, contentJson string) *global.BasicError {
 	resp, err := lc.Client.Im.Message.Reply(ctx, larkim.NewReplyMessageReqBuilder().
 		MessageId(receiveID).
 		Body(larkim.NewReplyMessageReqBodyBuilder().
@@ -39,16 +41,13 @@ func (lc *LarkClient) ReplyMsg(ctx context.Context, receiveID, msgType, contentJ
 			Content(contentJson).
 			Build()).
 		Build())
-	if err != nil {
-		return err
-	}
-	if !resp.Success() {
-		return fmt.Errorf("failed to reply message: %s", resp.Msg)
+	if err != nil || !resp.Success() {
+		return global.NewBasicError(global.CodeServerError, "failed to reply message", resp, nil)
 	}
 	return nil
 }
 
-func (lc *LarkClient) SendCardMsg(ctx context.Context, chatID, cardJson string) error {
+func (lc *LarkClient) SendCardMsg(ctx context.Context, chatID, cardJson string) *global.BasicError {
 	// TODO 发送消息卡片
 	resp, err := lc.Client.Im.Message.Create(ctx, larkim.NewCreateMessageReqBuilder().
 		ReceiveIdType(larkim.ReceiveIdTypeChatId).
@@ -59,14 +58,25 @@ func (lc *LarkClient) SendCardMsg(ctx context.Context, chatID, cardJson string) 
 			Build()).
 		Build())
 
-	if err != nil {
-
-		return err
+	if err != nil || !resp.Success() {
+		return global.NewBasicError(global.CodeServerError, "failed to send card message", resp, err)
 	}
-	if !resp.Success() {
-		return fmt.Errorf("failed to send card message: %s", resp.Msg)
-	}
+	return nil
+}
 
+func (lc *LarkClient) SendTextMsg(ctx context.Context, chatID, content string) *global.BasicError {
+	resp, err := lc.Client.Im.Message.Create(ctx, larkim.NewCreateMessageReqBuilder().
+		ReceiveIdType(larkim.ReceiveIdTypeChatId).
+		Body(larkim.NewCreateMessageReqBodyBuilder().
+			MsgType(larkim.MsgTypeText).
+			ReceiveId(chatID).
+			Content(content).
+			Build()).
+		Build())
+	if err != nil || !resp.Success() {
+		global.Log.Errorf("failed to send text message: %v, err: %v", resp, err)
+		return global.NewBasicError(global.CodeServerError, "failed to send text message", resp, err)
+	}
 	return nil
 }
 
@@ -125,13 +135,15 @@ func ConvertEventToMessage(event *larkim.P2MessageReceiveV1) domain.Message {
 	}
 }
 
-func WhichMentioned(ctx context.Context, redisClient *RedisClient, message domain.Message) (domain.ServiceFiled, error) {
+func WhichMentioned(ctx context.Context, redisClient *RedisClient, message domain.Message) (domain.ServiceFiled, *global.BasicError) {
 	// 从 Redis 中获取机器人的服务字段
+	if len(message.Mentions) == 0 {
+		return "", nil
+	}
 	serviceField, err := redisClient.Client.Get(ctx, fmt.Sprintf("bot:%s", message.Mentions[0].Name)).Result()
-	if err == redis.Nil {
-		return "", fmt.Errorf("bot not found")
-	} else if err != nil {
-		return "", fmt.Errorf("redis get error: %w", err)
+	if err == redis.Nil || err != nil {
+		global.Log.Errorf("failed to get bot: %s, err: %v", message.Mentions[0].Name, err)
+		return "", global.NewBasicError(global.CodeServerError, "bot not found", nil, nil)
 	}
 	return domain.ServiceFiled(serviceField), nil
 }

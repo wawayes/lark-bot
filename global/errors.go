@@ -9,6 +9,8 @@ type ErrorCode string
 
 // 通用错误码
 const (
+	OK = "0"
+
 	CodeSuccess        = "200"
 	CodeNoData         = "204"
 	CodeInvalidRequest = "400"
@@ -45,10 +47,10 @@ type BasicError struct {
 }
 
 func (e *BasicError) Error() string {
-	if e.Err != nil {
+	if e != nil {
 		return fmt.Sprintf("code: %s, msg: %s, data: %+v, err: %s", e.Code, e.Message, e.Data, e.Err)
 	}
-	return fmt.Sprintf("code: %s, msg: %s, data: %+v", e.Code, e.Message, e.Data)
+	return "err is nil"
 }
 
 // NewBasicError 创建新的BasicError

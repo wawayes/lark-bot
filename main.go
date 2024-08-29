@@ -15,6 +15,7 @@ import (
 	"github.com/wawayes/lark-bot/global"
 	"github.com/wawayes/lark-bot/infrastructure"
 	"github.com/wawayes/lark-bot/infrastructure/adapters"
+	"github.com/wawayes/lark-bot/services"
 
 	"github.com/gin-gonic/gin"
 	sdkginext "github.com/larksuite/oapi-sdk-gin"
@@ -37,19 +38,25 @@ func main() {
 	// 初始化命令工厂
 	commandFactory := application.NewCommandFactory(adapter)
 	// 天气服务
-	weatherService := application.NewWeatherService(conf.QWeather.Key)
+	weatherService := services.NewWeatherService(conf.QWeather.Key)
 	// 初始化 CardHandler
-	cardHandler := application.NewCardHandler(weatherService, adapter.Lark())
+	cardHandler := application.NewCardHandler(weatherService, adapter)
 
 	// 设置事件处理器
 	eventHandler := dispatcher.NewEventDispatcher(conf.Lark.VerificationToken, conf.Lark.EncryptToken).
 		OnP2MessageReceiveV1(func(ctx context.Context, event *larkim.P2MessageReceiveV1) error {
 			message := adapters.ConvertEventToMessage(event)
+			global.Log.Infof("receive message: %+v", message)
 			command := commandFactory.CreateCommand(message.MsgType)
 			if command == nil {
-				return fmt.Errorf("unsupported message type: %s", message.MsgType)
+				global.Log.Infof("no command found for message: %+v", message)
+				return nil
 			}
-			return command.Execute(ctx, message)
+			err := command.Execute(ctx, message)
+			if err != nil {
+				global.Log.Errorf("failed to execute command: %+v", err)
+			}
+			return nil
 		})
 
 	r.POST("/webhook/event", sdkginext.NewEventHandlerFunc(eventHandler))

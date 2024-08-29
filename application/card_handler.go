@@ -3,70 +3,111 @@ package application
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	larkcard "github.com/larksuite/oapi-sdk-go/v3/card"
-	larkim "github.com/larksuite/oapi-sdk-go/v3/service/im/v1"
 	"github.com/wawayes/lark-bot/global"
 	"github.com/wawayes/lark-bot/infrastructure/adapters"
+	"github.com/wawayes/lark-bot/services"
 )
 
 type CardHandler interface {
-	Handle(ctx context.Context, cardAction *larkcard.CardAction) (interface{}, *global.BasicError)
+	Handle(ctx context.Context, cardAction *larkcard.CardAction) (interface{}, error)
 }
 
 type CardHandlerImpl struct {
-	weatherService WeatherService
-	// llmService LLMService
-	larkClient *adapters.LarkClient
+	weatherService services.WeatherService
+	adapter        adapters.Adapter
 }
 
-func NewCardHandler(weatherService WeatherService, larkClient *adapters.LarkClient) *CardHandlerImpl {
+func NewCardHandler(weatherService services.WeatherService, adapter adapters.Adapter) *CardHandlerImpl {
 	return &CardHandlerImpl{
 		weatherService: weatherService,
-		larkClient:     larkClient,
+		adapter:        adapter,
 	}
 }
 
 func (h *CardHandlerImpl) Handle(ctx context.Context, cardAction *larkcard.CardAction) (interface{}, error) {
-	action := cardAction.Action.Value
-
-	var responseCard *adapters.LarkMessageCard
-
-	todo := action["todo"]
-	switch todo {
-	case "today_weather":
-		weather, err := h.weatherService.GetDailyForecast(ctx, "101010700", 3)
-		if !err.Ok() {
-			global.Log.Errorf("failed to get today's weather: %+v, err: %+v", weather, err)
-			return createErrorResponse("Failed to get today's weather"), nil
-		}
-		responseCard = createWeatherCard("Today's Weather", fmt.Sprintf("City: %s\nDate: %s\nMax Temp: %s\nMin Temp: %s\nDay: %s\nNight: %s\nHumidity: %s\nWind Speed: %s", weather.City, weather.FxDate, weather.TempMax, weather.TempMin, weather.TextDay, weather.TextNight, weather.Humidity, weather.WindSpeed))
-	case "current_weather":
-		forecast, err := h.weatherService.GetCurrentWeather(ctx, "101010700")
-		if !err.Ok() {
-			global.Log.Errorf("failed to get weather forecast: %+v, err: %+v", forecast, err)
-			return createErrorResponse("Failed to get weather forecast"), nil
-		}
-		responseCard = createWeatherCard("Weather Forecast", fmt.Sprintf("City: %s\nObsTime: %s\nTemp: %s\nText: %s\nHumidity: %s\nFxLink: %s", forecast.City, forecast.ObsTime, forecast.Temp, forecast.Text, forecast.Humidity, forecast.FxLink))
-	default:
+	global.Log.Infof("receive card action: %+v", cardAction)
+	cmd := NewWeatherCommand(h.weatherService, &h.adapter, cardAction)
+	if cmd == nil {
 		return createErrorResponse("Unknown action"), nil
 	}
 
-	cardJSON, err := responseCard.ToJson()
+	// 如果是返回操作，发送首页卡片
+	if cmd.IsBack() {
+		cardFactory := &WeatherCardFactory{}
+		cardJSON, err := cardFactory.CreateCard()
+		if err != nil {
+			global.Log.Errorf("failed to create card: %+v", err)
+			return createErrorResponse("Failed to create response card"), nil
+		}
+		h.adapter.Lark().SendCardMsg(ctx, cardAction.OpenChatId, cardJSON)
+		global.Log.Infof("send card message: %s", cardJSON)
+		return createSuccessResponse(cardJSON), nil
+	}
+
+	responseCard, err := cmd.Execute(ctx)
 	if err != nil {
+		global.Log.Errorf("failed to execute command: %+v", err)
+		return createErrorResponse("Failed to process request"), nil
+	}
+
+	cardJSON, errJson := responseCard.ToJson()
+	if errJson != nil {
+		global.Log.Errorf("failed to create card: %+v", errJson)
 		return createErrorResponse("Failed to create response card"), nil
 	}
-	h.larkClient.SendCardMsg(ctx, cardAction.OpenChatId, cardJSON)
+	h.adapter.Lark().SendCardMsg(ctx, cardAction.OpenChatId, cardJSON)
+	global.Log.Infof("send card message: %s", cardJSON)
 	return createSuccessResponse(cardJSON), nil
+}
+
+func NewWeatherCommand(weatherService services.WeatherService, adapter *adapters.Adapter, cardAction *larkcard.CardAction) WeatherCommand {
+	action := cardAction.Action.Value
+	todo := action["todo"]
+	switch todo {
+	case "daily_weather", "today", "three_days", "seven_days", "back":
+		return NewDailyWeatherCommand(weatherService, adapter, cardAction)
+	case "current_weather":
+		return NewCurrentWeatherCommand(weatherService, adapter, cardAction)
+	case "rain_snow":
+		return NewRainSnowCommand(weatherService, adapter, cardAction)
+	case "warning_weather":
+		return NewWarningWeatherCommand(weatherService, adapter, cardAction)
+	default:
+		return nil
+	}
+}
+
+func buildWeatherHomeBtns() []larkcard.MessageCardActionElement {
+	card := adapters.NewLarkMessageCard()
+	btns := []larkcard.MessageCardActionElement{}
+	btnDaily := card.AddButton("每日天气", map[string]interface{}{
+		"todo":     "daily_weather",
+		"nextCard": "daily_weather_card",
+	}, *larkcard.MessageCardButtonTypePrimary.Ptr())
+	btnCurrent := card.AddButton("实时天气", map[string]interface{}{
+		"todo":     "current_weather",
+		"nextCard": "current_weather_card",
+	}, *larkcard.MessageCardButtonTypePrimary.Ptr())
+	btnRainSnow := card.AddButton("雨雪提醒", map[string]interface{}{
+		"todo":     "rain_snow",
+		"nextCard": "rain_snow_card",
+	}, *larkcard.MessageCardButtonTypePrimary.Ptr())
+	btnWarningWeather := card.AddButton("预警天气", map[string]interface{}{
+		"todo":     "warning_weather",
+		"nextCard": "warning_weather_card",
+	}, *larkcard.MessageCardButtonTypePrimary.Ptr())
+	btns = append(btns, btnDaily, btnCurrent, btnRainSnow, btnWarningWeather)
+	return btns
 }
 
 func createSuccessResponse(cardJSON string) map[string]interface{} {
 	return map[string]interface{}{
-		"toast": map[string]interface{}{
-			"type":    "success",
-			"content": "操作成功",
-		},
+		// "toast": map[string]interface{}{
+		// 	"type":    "success",
+		// 	"content": "操作成功",
+		// },
 		"card": map[string]interface{}{
 			"type": "raw",
 			"data": json.RawMessage(cardJSON),
@@ -81,16 +122,4 @@ func createErrorResponse(message string) map[string]interface{} {
 			"content": message,
 		},
 	}
-}
-
-func createWeatherCard(title string, weather string) *adapters.LarkMessageCard {
-	card := adapters.NewLarkMessageCard()
-	card.AddHeader(title)
-	card.AddTextElement(weather)
-	return card
-}
-
-func (h *CardHandlerImpl) HandleMessage(ctx context.Context, event *larkim.P2MessageReceiveV1) error {
-	// This method is not used in this scenario, but kept for compatibility
-	return nil
 }

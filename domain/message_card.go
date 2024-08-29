@@ -1,11 +1,11 @@
 package domain
 
-type MessageCard interface {
-	ToJson() (string, error)
+import "github.com/wawayes/lark-bot/global"
+
+type CardFactory interface {
+	CreateCard() (string, *global.BasicError)
 }
 
-type Button struct {
-	Text      string                 `json:"text"`
-	Value     map[string]interface{} `json:"value"`
-	Behaviors map[string]interface{} `json:"behaviors"`
+type MessageCard interface {
+	ToJson() (string, error)
 }

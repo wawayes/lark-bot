@@ -1,4 +1,4 @@
-package application
+package services
 
 import (
 	"context"
@@ -21,9 +21,8 @@ type WeatherServiceImpl struct {
 }
 
 func NewWeatherService(apiKey string) *WeatherServiceImpl {
-	client := qweather.NewClient(apiKey)
 	return &WeatherServiceImpl{
-		sdk: client,
+		sdk: qweather.NewClient(apiKey),
 	}
 }
 
@@ -33,21 +32,26 @@ func (s *WeatherServiceImpl) GetDailyForecast(ctx context.Context, location stri
 		global.Log.Errorf("failed to get geo: %+v, err: %+v", geo, err)
 		return nil, global.NewBasicError(geo.Code, fmt.Sprintf("failed to get geo: %+v", geo), nil, err)
 	}
-	dailyForecast, err := s.sdk.GetDailyForecast(location, days)
+	dailyForecastResp, err := s.sdk.GetDailyForecast(geo.Location[0].ID, days)
 	if err != nil {
-		global.Log.Errorf("failed to get daily forecast: %+v, err: %+v", dailyForecast, err)
-		return nil, global.NewBasicError(dailyForecast.Code, fmt.Sprintf("failed to get daily forecast: %+v", dailyForecast), nil, err)
+		global.Log.Errorf("failed to get daily forecast: %+v, err: %+v", dailyForecastResp, err)
+		return nil, global.NewBasicError(dailyForecastResp.Code, fmt.Sprintf("failed to get daily forecast: %+v", dailyForecastResp), nil, err)
 	}
-	return &domain.DailyForecast{
-		City:      geo.Location[0].Name,
-		FxDate:    dailyForecast.Daily[0].FxDate,
-		TempMax:   dailyForecast.Daily[0].TempMax,
-		TempMin:   dailyForecast.Daily[0].TempMin,
-		TextDay:   dailyForecast.Daily[0].TextDay,
-		TextNight: dailyForecast.Daily[0].TextNight,
-		Humidity:  dailyForecast.Daily[0].Humidity,
-		WindSpeed: dailyForecast.Daily[0].WindSpeedDay,
-	}, &global.BasicError{}
+	dailyForecast := &domain.DailyForecast{}
+	dailyForecast.City = geo.Location[0].Name
+	for _, v := range dailyForecastResp.Daily {
+		dailyForecast.Daily = append(dailyForecast.Daily, domain.Daily{
+			FxDate:       v.FxDate,
+			TempMax:      v.TempMax,
+			TempMin:      v.TempMin,
+			TextDay:      v.TextDay,
+			TextNight:    v.TextNight,
+			Humidity:     v.Humidity,
+			WindSpeedDay: v.WindSpeedDay,
+			Precip:       v.Precip,
+		})
+	}
+	return dailyForecast, &global.BasicError{}
 }
 
 func (s *WeatherServiceImpl) GetCurrentWeather(ctx context.Context, location string) (*domain.CurrentWeather, *global.BasicError) {
@@ -56,7 +60,7 @@ func (s *WeatherServiceImpl) GetCurrentWeather(ctx context.Context, location str
 		global.Log.Errorf("failed to get geo: %+v, err: %+v", geo, err)
 		return nil, global.NewBasicError(geo.Code, fmt.Sprintf("failed to get geo: %+v", geo), nil, err)
 	}
-	currentWeather, err := s.sdk.GetCurrentWeather(location)
+	currentWeather, err := s.sdk.GetCurrentWeather(geo.Location[0].ID)
 	if err != nil {
 		global.Log.Errorf("failed to get current weather: %+v, err: %+v", currentWeather, err)
 		return nil, global.NewBasicError(currentWeather.Code, fmt.Sprintf("failed to get current weather: %+v", currentWeather), nil, err)
@@ -88,14 +92,27 @@ func (s *WeatherServiceImpl) GetRainSnow(ctx context.Context, location string) (
 func (s *WeatherServiceImpl) GetWarningWeather(ctx context.Context, location string) (*domain.WarningWeather, *global.BasicError) {
 	geo, err := s.sdk.CityLookup(location)
 	if err != nil {
+		global.Log.Errorf("failed to get geo: %+v", geo)
 		return nil, global.NewBasicError(geo.Code, fmt.Sprintf("failed to get geo: %+v", geo), nil, err)
 	}
-	warningWeather, err := s.sdk.GetWarningWeather(location)
+	warningWeather, err := s.sdk.GetWarningWeather(geo.Location[0].ID)
 	if err != nil {
+		global.Log.Errorf("failed to get warning weather: %+v", warningWeather)
 		return nil, global.NewBasicError(warningWeather.Code, fmt.Sprintf("failed to get warning weather: %+v", warningWeather), nil, err)
+	}
+	warningList := make([]domain.Warning, 0)
+	for _, v := range warningWeather.Warning {
+		warningList = append(warningList, domain.Warning{
+			Sender:   v.Sender,
+			PubTime:  v.PubTime,
+			Title:    v.Title,
+			Status:   v.Status,
+			Severity: v.Severity,
+			Text:     v.Text,
+		})
 	}
 	return &domain.WarningWeather{
 		City:    geo.Location[0].Name,
-		Summary: warningWeather.Warning[0].Text,
+		Warning: warningList,
 	}, &global.BasicError{}
 }
